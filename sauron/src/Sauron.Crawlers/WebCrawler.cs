@@ -27,6 +27,7 @@ namespace Sauron.Crawlers
                     {
                         Id = BuildRawDataId(source, filter),
                         Url = GetUrl(source),
+                        Filter = filter.AsQueryString(),
                         Visited = DateTime.Now,
                         RawContent = getResponseAsync.Result.Content
                     };

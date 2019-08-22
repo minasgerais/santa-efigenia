@@ -11,7 +11,7 @@ namespace Sauron.Repositories.MongoDB
         public static IServiceCollection AddRepositories(this IServiceCollection services, IConfiguration configuration)
         {
             services.TryAddScoped<IMongoClient>(provider => new MongoClient(configuration["SAURON_MONGO_DB_CONNECTION"]));
-            services.TryAddScoped<IRawDataRepository, SearchRawDataRepository>();
+            services.TryAddScoped<IRawDataRepository, RawDataRepository>();
 
             return services;
         }

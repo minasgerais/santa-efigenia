@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Sauron.Repositories.MongoDB
 {
-    public class SearchRawDataRepository : IRawDataRepository
+    public class RawDataRepository : IRawDataRepository
     {
         private readonly IMongoDatabase _mongoDatabase;
 
-        public SearchRawDataRepository(IMongoClient mongoClient, IConfiguration configuration)
+        public RawDataRepository(IMongoClient mongoClient, IConfiguration configuration)
         {
             _mongoDatabase = mongoClient.GetDatabase(configuration["SAURON_MONGO_DB_DATABASE"]);
         }
