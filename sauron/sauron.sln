@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sauron.Runner", "src\Sauron.Runner\Sauron.Runner.csproj", "{4097B355-A52E-4889-B7A2-9BA9EB29185E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sauron.Runner", "src\Sauron.Runner\Sauron.Runner.csproj", "{4097B355-A52E-4889-B7A2-9BA9EB29185E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sauron.Orchestrator", "src\Sauron.Orchestrator\Sauron.Orchestrator.csproj", "{885444F6-5B28-4348-A607-EF0D4153130B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sauron.Orchestrator", "src\Sauron.Orchestrator\Sauron.Orchestrator.csproj", "{885444F6-5B28-4348-A607-EF0D4153130B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sauron.Abstractions", "src\Sauron.Abstractions\Sauron.Abstractions.csproj", "{723C3515-664E-457B-A372-D9305605E74D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sauron.Abstractions", "src\Sauron.Abstractions\Sauron.Abstractions.csproj", "{723C3515-664E-457B-A372-D9305605E74D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sauron.Crawlers", "src\Sauron.Crawlers\Sauron.Crawlers.csproj", "{ADCEDE76-E23A-440E-BA51-A3EA72674D92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sauron.Crawlers", "src\Sauron.Crawlers\Sauron.Crawlers.csproj", "{ADCEDE76-E23A-440E-BA51-A3EA72674D92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sauron.Crawlers.UnitTests", "tests\Sauron.Crawlers.UnitTests\Sauron.Crawlers.UnitTests.csproj", "{3E8DFF24-1470-4AA7-B429-6B448987E5AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sauron.Crawlers.UnitTests", "tests\Sauron.Crawlers.UnitTests\Sauron.Crawlers.UnitTests.csproj", "{3E8DFF24-1470-4AA7-B429-6B448987E5AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{83C82506-3519-426A-99C3-482CA76DADA9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6D0D1C51-E62F-49AC-9DD9-CB73D12159A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sauron.Repositories.MongoDB", "src\Sauron.Repositories.MongoDB\Sauron.Repositories.MongoDB.csproj", "{4BC64D3A-9FFD-4DF6-913C-55EFCEB802A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{3E8DFF24-1470-4AA7-B429-6B448987E5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E8DFF24-1470-4AA7-B429-6B448987E5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E8DFF24-1470-4AA7-B429-6B448987E5AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BC64D3A-9FFD-4DF6-913C-55EFCEB802A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BC64D3A-9FFD-4DF6-913C-55EFCEB802A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BC64D3A-9FFD-4DF6-913C-55EFCEB802A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BC64D3A-9FFD-4DF6-913C-55EFCEB802A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{723C3515-664E-457B-A372-D9305605E74D} = {83C82506-3519-426A-99C3-482CA76DADA9}
 		{ADCEDE76-E23A-440E-BA51-A3EA72674D92} = {83C82506-3519-426A-99C3-482CA76DADA9}
 		{3E8DFF24-1470-4AA7-B429-6B448987E5AF} = {6D0D1C51-E62F-49AC-9DD9-CB73D12159A3}
+		{4BC64D3A-9FFD-4DF6-913C-55EFCEB802A4} = {83C82506-3519-426A-99C3-482CA76DADA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CE90278C-4640-42F2-A0AF-33E930C359C0}
