@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MongoDB.Driver;
+using Sauron.Abstractions.Extensions;
 using Sauron.Abstractions.Repositories;
 
 namespace Sauron.Repositories.MongoDB
@@ -10,7 +11,7 @@ namespace Sauron.Repositories.MongoDB
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services, IConfiguration configuration)
         {
-            services.TryAddScoped<IMongoClient>(provider => new MongoClient(configuration["SAURON_MONGO_DB_CONNECTION"]));
+            services.TryAddScoped<IMongoClient>(provider => new MongoClient(configuration.TryGet("SAURON_MONGO_DB_CONNECTION")));
             services.TryAddScoped<IRawDataRepository, RawDataRepository>();
 
             return services;

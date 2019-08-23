@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sauron.Crawlers;
+using Sauron.JobScheduler;
 using Sauron.Repositories.MongoDB;
 using System;
 
@@ -36,6 +37,7 @@ namespace Sauron.Orchestrator
         void IStartup.Configure(IApplicationBuilder app)
         {
             Configure(app);
+            app.UseJobScheduler();
         }
     }
 }
