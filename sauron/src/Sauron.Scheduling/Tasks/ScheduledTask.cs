@@ -1,15 +1,15 @@
 ﻿using FluentScheduler;
 using System.Threading.Tasks;
 
-namespace Sauron.JobScheduler
+namespace Sauron.Scheduling.Tasks
 {
-    public abstract class Job : Registry
+    public abstract class ScheduledTask : Registry
     {
         protected int Interval { get; }
 
         public abstract Task ExecuteAsync();
 
-        public Job()
+        public ScheduledTask()
         {
             Schedule(async () => await ExecuteAsync()).ToRunNow().AndEvery(1).Months().OnTheLastDay();
             NonReentrantAsDefault();

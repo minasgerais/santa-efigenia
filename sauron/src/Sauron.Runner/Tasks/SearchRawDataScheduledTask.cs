@@ -4,13 +4,13 @@ using Sauron.Abstractions.Extensions;
 using Sauron.Abstractions.Models;
 using Sauron.Abstractions.Repositories;
 using Sauron.Crawlers;
-using Sauron.JobScheduler;
+using Sauron.Scheduling.Tasks;
 using System;
 using System.Threading.Tasks;
 
 namespace Sauron.Runner.Jobs
 {
-    public class SearchRawDataJob : Job
+    public class SearchRawDataScheduledTask : ScheduledTask
     {
         private const string ResourceName = "SAURON_CRAWLER_SEARCH_RESOURCE";
         private const string CollectionName = "SAURON_MONGO_DB_DATABASE_SEARCH_COLLECTION";
@@ -19,7 +19,7 @@ namespace Sauron.Runner.Jobs
         private readonly IWebCrawler<RawData> _webCrawler;
         private readonly IRawDataRepository _rawDataRepository;
 
-        public SearchRawDataJob(IConfiguration configuration, IWebCrawler<RawData> webCrawler, IRawDataRepository rawDataRepository)
+        public SearchRawDataScheduledTask(IConfiguration configuration, IWebCrawler<RawData> webCrawler, IRawDataRepository rawDataRepository)
         {
             (_configuration, _webCrawler, _rawDataRepository) = (configuration, webCrawler, rawDataRepository);
         }

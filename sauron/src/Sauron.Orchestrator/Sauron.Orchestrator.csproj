@@ -15,8 +15,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Sauron.Abstractions\Sauron.Abstractions.csproj" />
     <ProjectReference Include="..\Sauron.Crawlers\Sauron.Crawlers.csproj" />
-    <ProjectReference Include="..\Sauron.JobScheduler\Sauron.JobScheduler.csproj" />
     <ProjectReference Include="..\Sauron.Repositories.MongoDB\Sauron.Repositories.MongoDB.csproj" />
+    <ProjectReference Include="..\Sauron.Scheduling\Sauron.Scheduling.csproj" />
   </ItemGroup>
 
 </Project>
