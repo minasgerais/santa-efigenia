@@ -13,7 +13,7 @@ namespace Sauron.Scheduling
     {
         private static readonly IList<Type> _schedule = new List<Type>();
 
-        public static IServiceCollection AddScheduledTask<TScheduledTask>(this IServiceCollection services) where TScheduledTask : EveryMonthScheduledTask
+        public static IServiceCollection AddScheduledTask<TScheduledTask>(this IServiceCollection services) where TScheduledTask : ScheduledTask
         {
             _schedule.Add(typeof(TScheduledTask));
 
@@ -25,7 +25,7 @@ namespace Sauron.Scheduling
         public static IApplicationBuilder UseScheduledTask(this IApplicationBuilder app)
         {
             var jobs = _schedule
-                .Select(type => (app.ApplicationServices.GetService(type) as EveryMonthScheduledTask))
+                .Select(type => (app.ApplicationServices.GetService(type) as ScheduledTask))
                 .ToArray();
 
             JobManager.Initialize(jobs);

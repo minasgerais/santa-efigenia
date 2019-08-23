@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Sauron.Runner.Jobs
 {
-    public class SearchRawDataScheduledTask : EveryMonthScheduledTask
+    public class SearchRawDataScheduledTask : ScheduledTask
     {
         private const string ResourceName = "SAURON_CRAWLER_GLOBAL_SOURCE";
         private const string CollectionName = "SAURON_MONGO_DB_DATABASE_GLOBAL_COLLECTION";
@@ -22,8 +22,10 @@ namespace Sauron.Runner.Jobs
         private readonly IRawDataRepository _rawDataRepository;
         private readonly ILogger _logger;
 
-        public SearchRawDataScheduledTask(IConfiguration configuration, IWebCrawler<RawData> webCrawler,
-            IRawDataRepository rawDataRepository, ILogger<SearchRawDataScheduledTask> logger)
+        protected override string Scheduler { get => "SAURON_TASK_SCHEDULER_DAYS_INTERVAL"; }
+
+        public SearchRawDataScheduledTask(IConfiguration configuration, IWebCrawler<RawData> webCrawler, IRawDataRepository rawDataRepository,
+            ILogger<SearchRawDataScheduledTask> logger) : base(configuration)
         {
             (_configuration, _webCrawler, _rawDataRepository, _logger) = (configuration, webCrawler, rawDataRepository, logger);
         }
