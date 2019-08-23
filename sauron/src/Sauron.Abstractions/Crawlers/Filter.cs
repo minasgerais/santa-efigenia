@@ -33,8 +33,7 @@ namespace Sauron.Crawlers
 
         public string AsQueryString()
         {
-            var queryString = string.Join("&", _parameters.Select(item => item.Key + "=" + item.Value));
-            return !string.IsNullOrWhiteSpace(queryString) ? $"?{queryString}" : default;
+            return string.Join("&", _parameters.Select(item => item.Key + "=" + item.Value));
         }
     }
 }

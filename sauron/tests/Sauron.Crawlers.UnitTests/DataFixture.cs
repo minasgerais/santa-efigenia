@@ -46,7 +46,6 @@ namespace Sauron.Crawlers.UnitTests
         public IFilter CreateDefaultFilter()
         {
             return Filter.Create()
-                    .AddParameter("paginaRequerida", 1)
                     .AddParameter("data", "06/2019");
         }
 

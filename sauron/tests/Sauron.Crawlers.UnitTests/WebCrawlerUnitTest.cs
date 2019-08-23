@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Sauron.Abstractions.Extensions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace Sauron.Crawlers.UnitTests
         public async Task Should_Get_Raw_Data()
         {
             var crawler = _dataFixture.CreateWebCrawler();
-            var source = _dataFixture.Configuration["SAURON_CRAWLER_SEARCH_RESOURCE"];
+            var source = _dataFixture.Configuration.TryGet("SAURON_CRAWLER_GLOBAL_SOURCE");
             var rawData = await crawler.ExtractAsync(source, _dataFixture.CreateDefaultFilter());
 
             rawData.Should().NotBeNull();

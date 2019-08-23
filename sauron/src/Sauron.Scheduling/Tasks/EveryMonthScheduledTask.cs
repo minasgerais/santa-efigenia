@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 
 namespace Sauron.Scheduling.Tasks
 {
-    public abstract class ScheduledTask : Registry
+    public abstract class EveryMonthScheduledTask : Registry
     {
         protected int Interval { get; }
 
         public abstract Task ExecuteAsync();
 
-        public ScheduledTask()
+        public EveryMonthScheduledTask()
         {
             Schedule(async () => await ExecuteAsync()).ToRunNow().AndEvery(1).Months().OnTheLastDay();
             NonReentrantAsDefault();
