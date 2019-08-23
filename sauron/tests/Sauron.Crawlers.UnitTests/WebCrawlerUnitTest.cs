@@ -1,25 +1,27 @@
 using FluentAssertions;
-using RestSharp;
+using Sauron.Abstractions.Extensions;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Sauron.Crawlers.UnitTests
 {
-    public class WebCrawlerUnitTest
+    public class WebCrawlerUnitTest : IClassFixture<DataFixture>
     {
+        private readonly DataFixture _dataFixture;
+
+        public WebCrawlerUnitTest(DataFixture dataFixture)
+        {
+            _dataFixture = dataFixture;
+        }
+
         [Fact]
         public async Task Should_Get_Raw_Data()
         {
-            var baseUrl = @"https://www.cmbh.mg.gov.br/sites/all/modules/execucao_orcamentaria_custeio";
-            var restClient = new RestClient(baseUrl);
-            var crawler = new WebCrawler(restClient);
+            var crawler = _dataFixture.CreateWebCrawler();
+            var source = _dataFixture.Configuration.TryGet("SAURON_CRAWLER_GLOBAL_SOURCE");
+            var rawData = await crawler.ExtractAsync(source, _dataFixture.CreateDefaultFilter());
 
-            var result = await crawler.ExtractAsync("pesquisar.php", Filter.Create()
-                    .AddParameter("paginaRequerida", 1)
-                    .AddParameter("data", "07/2019")
-                );
-
-            result.Should().NotBeNull();
+            rawData.Should().NotBeNull();
         }
     }
 }

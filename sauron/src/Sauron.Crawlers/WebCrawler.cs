@@ -27,7 +27,8 @@ namespace Sauron.Crawlers
                     {
                         Id = BuildRawDataId(source, filter),
                         Url = GetUrl(source),
-                        Visited = DateTime.Now,
+                        Filter = filter.AsQueryString(),
+                        Visited = DateTimeOffset.Now,
                         RawContent = getResponseAsync.Result.Content
                     };
                 });
@@ -48,7 +49,9 @@ namespace Sauron.Crawlers
 
         private string BuildRawDataId(string source, IFilter filter)
         {
-            return GetMd5Hash($"{GetUrl(source)}{filter.AsQueryString()}");
+            var url = GetUrl(source);
+            var query = filter.AsQueryString();
+            return GetMd5Hash(!string.IsNullOrWhiteSpace(query) ? $"{url}?{query}" : url);
         }
 
         private string GetUrl(string source) => $"{_restClient.BaseUrl}/{source}";

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sauron.Crawlers;
+using Sauron.Repositories.MongoDB;
+using Sauron.Scheduling;
 using System;
 
 namespace Sauron.Orchestrator
@@ -24,7 +26,8 @@ namespace Sauron.Orchestrator
 
         IServiceProvider IStartup.ConfigureServices(IServiceCollection services)
         {
-            services.AddCrawlers();
+            services.AddCrawlers(Configuration);
+            services.AddRepositories(Configuration);
 
             ConfigureServices(services);
 
@@ -34,6 +37,8 @@ namespace Sauron.Orchestrator
         void IStartup.Configure(IApplicationBuilder app)
         {
             Configure(app);
+
+            app.UseScheduledTask();
         }
     }
 }
