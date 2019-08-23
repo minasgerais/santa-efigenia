@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Sauron.Abstractions.Extensions;
+using Sauron.Crawlers.Extensions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -22,6 +23,12 @@ namespace Sauron.Crawlers.UnitTests
             var rawData = await crawler.ExtractAsync(source, _dataFixture.CreateDefaultFilter());
 
             rawData.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Should_Generate_Crc()
+        {
+            "SAURON".GetCrc().Should().BeEquivalentTo("2B259010");
         }
     }
 }
