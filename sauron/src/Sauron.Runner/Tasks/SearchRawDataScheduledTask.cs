@@ -40,7 +40,7 @@ namespace Sauron.Runner.Jobs
             var rawData = await _webCrawler.ExtractAsync(source, filter);
 
             _logger.Stamp($"Saving raw data:", rawData);
-            await _rawDataRepository.SaveAsync(collectionName, rawData);
+            await _rawDataRepository.AddIfNotExistsAsync(collectionName, rawData);
         }
     }
 }
