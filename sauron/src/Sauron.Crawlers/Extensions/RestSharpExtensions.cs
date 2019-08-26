@@ -14,5 +14,10 @@ namespace Sauron.Crawlers.Extensions
             int numericResponse = (int)response.StatusCode;
             return numericResponse >= 200 && numericResponse <= 399;
         }
+
+        public static string GetContent(this IRestResponse response)
+        {
+            return (response.IsSuccessful()) ? response.Content : $"{response.ErrorMessage}:{response.ErrorException.ToString()}";
+        }
     }
 }

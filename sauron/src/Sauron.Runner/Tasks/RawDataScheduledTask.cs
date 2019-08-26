@@ -30,6 +30,8 @@ namespace Sauron.Runner.Tasks
             (Configuration, _webCrawler, _rawDataRepository, _logger) = (configuration, webCrawler, rawDataRepository, logger);
         }
 
+        public abstract Task<List<IFilter>> ExtractFiltersAsync();
+
         protected void Stamp(string message)
         {
             _logger.Stamp(message);
@@ -40,17 +42,41 @@ namespace Sauron.Runner.Tasks
             _logger.Stamp(message, obj);
         }
 
+        public override async Task ExecuteAsync()
+        {
+            Stamp($"{GetType().Name} started.");
+
+            var filters = await ExtractFiltersAsync();
+
+            foreach (var item in filters)
+            {
+                Stamp("Extracting raw data.");
+                var rawData = await ExtractRawDataAsync(item);
+
+                if (await AddRawDataIfNotExtistAsync(rawData))
+                {
+                    Stamp($"Raw data saved:", rawData);
+                }
+                else
+                {
+                    Stamp($"raw data already exists");
+                }
+            }
+
+            Stamp($"{GetType().Name} ended.");
+        }
+
         protected Task<RawData> ExtractRawDataAsync(IFilter filter)
         {
             return _webCrawler.ExtractAsync(Source, filter);
         }
 
-        protected Task AddRawDataIfNotExtistAsync(RawData rawData)
+        protected Task<bool> AddRawDataIfNotExtistAsync(RawData rawData)
         {
             return _rawDataRepository.AddIfNotExistsAsync(Collection, rawData);
         }
 
-        protected Task<List<RawData>> GetAllRawDataAsync()
+        protected virtual Task<List<RawData>> GetAllRawDataAsync()
         {
             return _rawDataRepository.GetAllAsync(Collection);
         }

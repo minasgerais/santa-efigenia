@@ -1,8 +1,8 @@
 ﻿using RestSharp;
 using Sauron.Abstractions.Crawlers;
+using Sauron.Abstractions.Factories;
 using Sauron.Abstractions.Models;
 using Sauron.Crawlers.Extensions;
-using System;
 using System.Threading.Tasks;
 
 namespace Sauron.Crawlers
@@ -21,30 +21,8 @@ namespace Sauron.Crawlers
             return GetResponseAsync(_restClient, source, filter)
                 .ContinueWith((getResponseAsync) =>
                 {
-                    var response = getResponseAsync.Result;
-
-                    if (response.IsSuccessful())
-                    {
-                        return new RawData
-                        {
-                            Id = BuildRawDataId(source, filter, response.Content),
-                            Url = GetUrl(source),
-                            Filter = filter.AsQueryString(),
-                            Visited = DateTimeOffset.Now,
-                            RawContent = response.Content
-                        };
-                    }
-                    else
-                    {
-                        return new RawData
-                        {
-                            Id = BuildRawDataId(source, filter, response.Content),
-                            Url = GetUrl(source),
-                            Filter = filter.AsQueryString(),
-                            Visited = DateTimeOffset.Now,
-                            RawContent = response.ErrorMessage ?? response.ErrorException?.StackTrace
-                        };
-                    }
+                    var rawContent = getResponseAsync.Result.GetContent();
+                    return RawDataFactory.CreateRawData(GetUrl(source), filter, rawContent);
                 });
         }
 
@@ -59,11 +37,6 @@ namespace Sauron.Crawlers
 
                 return cliente.Execute(request);
             });
-        }
-
-        private string BuildRawDataId(string source, IFilter filter, string rawContent)
-        {
-            return $"{GetUrl(source)}{filter.AsQueryString()}{rawContent}".GetCrc();
         }
 
         private string GetUrl(string source) => $"{_restClient.BaseUrl}/{source}";
