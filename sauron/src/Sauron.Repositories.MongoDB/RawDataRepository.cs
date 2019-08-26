@@ -24,6 +24,15 @@ namespace Sauron.Repositories.MongoDB
             return GetCollection(collectionName).InsertOneAsync(rawData);
         }
 
+        public Task AddIfNotExistsAsync(string collectionName, RawData rawData)
+        {
+            return GetAsync(collectionName, rawData.Id)
+                .ContinueWith(
+                        (getAsync) => (getAsync.Result == default)
+                            ? AddAsync(collectionName, rawData) : Task.CompletedTask
+                    );
+        }
+
         public Task DeleteAsync(string collectionName, string id)
         {
             return GetCollection(collectionName).DeleteOneAsync(doc => doc.Id == id);

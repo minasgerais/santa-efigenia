@@ -7,6 +7,7 @@ namespace Sauron.Abstractions.Repositories
     public interface IRawDataRepository
     {
         Task AddAsync(string collectionName, RawData rawData);
+        Task AddIfNotExistsAsync(string collectionName, RawData rawData);
         Task DeleteAsync(string collectionName, string id);
         Task DeleteAsync(string collectionName, RawData rawData);
         Task<List<RawData>> GetAllAsync(string collectionName);
