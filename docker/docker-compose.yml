@@ -7,7 +7,7 @@ services:
     container_name: sta_efigenia_mongo_db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: p@sswd
+      MONGO_INITDB_ROOT_PASSWORD: root
     ports:
       - 8082:27017
     volumes:
@@ -22,10 +22,10 @@ services:
       - 8081:8081
     environment:
       ME_CONFIG_BASICAUTH_USERNAME: root
-      ME_CONFIG_BASICAUTH_PASSWORD: p@sswd
+      ME_CONFIG_BASICAUTH_PASSWORD: root
       ME_CONFIG_MONGODB_PORT: 27017
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: p@sswd
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
     links:
       - mongo
     networks:
@@ -36,7 +36,7 @@ services:
     container_name: sta_efigenia_rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: root
-      RABBITMQ_DEFAULT_PASS: p@sswd   
+      RABBITMQ_DEFAULT_PASS: root
     ports:
       - 8083:5672
       - 8084:15672
