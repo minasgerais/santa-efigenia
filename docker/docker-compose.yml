@@ -1,32 +1,48 @@
 version: '3'
 
 services:
-  mongo-express:
-    image: mongo-express
-    container_name: sta_efigenia_mongo_express
-    ports:
-      - 8091:8081
-    environment:
-      ME_CONFIG_BASICAUTH_USERNAME: d841fb41
-      ME_CONFIG_BASICAUTH_PASSWORD: cd0cf380!#
-      ME_CONFIG_MONGODB_PORT: 27017
-      ME_CONFIG_MONGODB_ADMINUSERNAME: 1cf5b351
-      ME_CONFIG_MONGODB_ADMINPASSWORD: 7cc57fac!#
-    links:
-      - mongo
-    networks:
-      - sta_efigenia_network
 
   mongo:
     image: mongo
     container_name: sta_efigenia_mongo_db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: 1cf5b351
-      MONGO_INITDB_ROOT_PASSWORD: 7cc57fac!#
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: p@sswd
     ports:
-      - 8090:27017
+      - 8082:27017
     volumes:
       - /home/volumes/mongodb/data/db:/data/db
+    networks:
+      - sta_efigenia_network
+
+  mongo-express:
+    image: mongo-express
+    container_name: sta_efigenia_mongo_express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: p@sswd
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: p@sswd
+    links:
+      - mongo
+    networks:
+      - sta_efigenia_network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: sta_efigenia_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: p@sswd   
+    ports:
+      - 8083:5672
+      - 8084:15672
+    volumes:
+      - /home/volumes/rabbitmq/var/lib:/var/lib/rabbitmq
+#      - /home/volumes/rabbitmq/etc:/etc/rabbitmq
     networks:
       - sta_efigenia_network
 
