@@ -42,7 +42,6 @@ services:
       - 8084:15672
     volumes:
       - /home/volumes/rabbitmq/var/lib:/var/lib/rabbitmq
-#      - /home/volumes/rabbitmq/etc:/etc/rabbitmq
     networks:
       - sta_efigenia_network
 
