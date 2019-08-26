@@ -21,16 +21,30 @@ namespace Sauron.Crawlers
             return GetResponseAsync(_restClient, source, filter)
                 .ContinueWith((getResponseAsync) =>
                 {
-                    var rawContent = getResponseAsync.Result.Content;
+                    var response = getResponseAsync.Result;
 
-                    return new RawData
+                    if (response.IsSuccessful())
                     {
-                        Id = BuildRawDataId(source, filter, rawContent),
-                        Url = GetUrl(source),
-                        Filter = filter.AsQueryString(),
-                        Visited = DateTimeOffset.Now,
-                        RawContent = rawContent
-                    };
+                        return new RawData
+                        {
+                            Id = BuildRawDataId(source, filter, response.Content),
+                            Url = GetUrl(source),
+                            Filter = filter.AsQueryString(),
+                            Visited = DateTimeOffset.Now,
+                            RawContent = response.Content
+                        };
+                    }
+                    else
+                    {
+                        return new RawData
+                        {
+                            Id = BuildRawDataId(source, filter, response.Content),
+                            Url = GetUrl(source),
+                            Filter = filter.AsQueryString(),
+                            Visited = DateTimeOffset.Now,
+                            RawContent = response.ErrorMessage ?? response.ErrorException?.StackTrace
+                        };
+                    }
                 });
         }
 
