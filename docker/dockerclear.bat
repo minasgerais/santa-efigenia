@@ -1,3 +1,0 @@
-docker stop sta_efigenia_mongo sta_efigenia_mongo_express sta_efigenia_rabbitmq sta_efigenia_sauron
-docker container rm sta_efigenia_mongo sta_efigenia_mongo_express sta_efigenia_rabbitmq sta_efigenia_sauron
-docker network rm docker_sta_efigenia_network
