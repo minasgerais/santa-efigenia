@@ -19,5 +19,10 @@ namespace Sauron.Abstractions.Extensions
                 return default;
             }
         }
+
+        public static T TryGet<T>(this IConfiguration configuration, string key)
+        {
+            return (T)Convert.ChangeType(configuration.TryGet(key), typeof(T));
+        }
     }
 }

@@ -1,33 +1,69 @@
 version: '3'
 
 services:
+
+  mongo:
+    image: mongo
+    container_name: sta_efigenia_mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - 8082:27017
+    volumes:
+      - /home/volumes/mongodb/data/db:/data/db
+    networks: 
+      - sta_efigenia_network
+
   mongo-express:
     image: mongo-express
     container_name: sta_efigenia_mongo_express
     ports:
-      - 8091:8081
+      - 8081:8081
     environment:
-      ME_CONFIG_BASICAUTH_USERNAME: d841fb41
-      ME_CONFIG_BASICAUTH_PASSWORD: cd0cf380!#
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: root
       ME_CONFIG_MONGODB_PORT: 27017
-      ME_CONFIG_MONGODB_ADMINUSERNAME: 1cf5b351
-      ME_CONFIG_MONGODB_ADMINPASSWORD: 7cc57fac!#
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
     links:
       - mongo
-    networks:
+    networks: 
       - sta_efigenia_network
-
-  mongo:
-    image: mongo
-    container_name: sta_efigenia_mongo_db
+  
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: sta_efigenia_rabbitmq
     environment:
-      MONGO_INITDB_ROOT_USERNAME: 1cf5b351
-      MONGO_INITDB_ROOT_PASSWORD: 7cc57fac!#
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: root
     ports:
-      - 8090:27017
+      - 8083:5672
+      - 8084:15672
     volumes:
-      - /home/volumes/mongodb/data/db:/data/db
-    networks:
+      - /home/volumes/rabbitmq/var/lib:/var/lib/rabbitmq
+    networks: 
+      - sta_efigenia_network
+  
+  sauron:
+    image: santa-efigenia/sauron:1.0-alpha
+    container_name: sta_efigenia_sauron
+    environment:
+      SAURON_TASK_SCHEDULER_DAYS_INTERVAL: 1
+      SAURON_CRAWLER_BASE_URL: https://www.cmbh.mg.gov.br/sites/all/modules/execucao_orcamentaria_custeio
+      SAURON_CRAWLER_INITIAL_YEAR: 2016
+      SAURON_CRAWLER_GLOBAL_SOURCE: pesquisar.php
+      SAURON_CRAWLER_DETAIL_SOURCE: detalhar.php
+      SAURON_MONGO_DB_USERNAME: root
+      SAURON_MONGO_DB_PASSWORD: root
+      SAURON_MONGO_DB_CONTCPIP: sta_efigenia_mongo
+      SAURON_MONGO_DB_CONNPORT: 27017
+      SAURON_MONGO_DB_DATABASE: sauron
+      SAURON_MONGO_DB_DATABASE_GLOBAL_COLLECTION: global
+      SAURON_MONGO_DB_DATABASE_DETAIL_COLLECTION: detail
+    links:
+      - mongo
+    networks: 
       - sta_efigenia_network
 
 networks: 

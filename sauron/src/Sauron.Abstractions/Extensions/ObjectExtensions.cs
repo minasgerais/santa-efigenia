@@ -1,8 +1,8 @@
-﻿using Sauron.Crawlers.IO;
+﻿using Sauron.Abstractions.IO;
 using System.IO;
 using System.Text;
 
-namespace Sauron.Crawlers.Extensions
+namespace Sauron.Abstractions.Extensions
 {
     public static class ObjectExtensions
     {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
 using RestSharp;
 using Sauron.Abstractions.Crawlers;
 using Sauron.Abstractions.Models;
@@ -37,10 +36,7 @@ namespace Sauron.Crawlers.IntegrationTests
 
         public IRawDataRepository GetRawDataRepository()
         {
-            return new RawDataRepository(
-                    new MongoClient(Configuration["SAURON_MONGO_DB_CONNECTION"]),
-                    Configuration
-                );
+            return new RawDataRepository(Configuration);
         }
     }
 }

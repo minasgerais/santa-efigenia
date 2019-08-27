@@ -27,7 +27,7 @@ namespace Sauron.Orchestrator
         IServiceProvider IStartup.ConfigureServices(IServiceCollection services)
         {
             services.AddCrawlers(Configuration);
-            services.AddRepositories(Configuration);
+            services.AddRepositories();
 
             ConfigureServices(services);
 

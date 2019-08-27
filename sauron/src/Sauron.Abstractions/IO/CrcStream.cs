@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Sauron.Crawlers.IO
+namespace Sauron.Abstractions.IO
 {
     public class CrcStream : Stream
     {
