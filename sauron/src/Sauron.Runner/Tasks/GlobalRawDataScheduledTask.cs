@@ -7,6 +7,7 @@ using Sauron.Abstractions.Repositories;
 using Sauron.Crawlers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Sauron.Runner.Tasks
@@ -24,42 +25,28 @@ namespace Sauron.Runner.Tasks
             ILogger<RawDataScheduledTask> logger) : base(configuration, webCrawler, rawDataRepository, logger)
         { }
 
-        public override async Task ExecuteAsync()
+        public override Task<List<IFilter>> ExtractFiltersAsync()
         {
-            Stamp($"{nameof(GlobalRawDataScheduledTask)} started.");
-
-            Stamp("Extracting filters.");
-            var filters = ExtractFilter();
-
-            foreach (var item in filters)
+            IEnumerable<IFilter> ExtractFilter()
             {
-                Stamp("Extracting raw data.");
-                var rawData = await ExtractRawDataAsync(item);
+                var currentDate = DateTime.Now;
+                var initialYear = int.Parse(Configuration.TryGet(CrawlerInitialYearConfigKey) ?? $"{currentDate.Year}");
 
-                Stamp($"Saving raw data:", rawData);
-                await AddRawDataIfNotExtistAsync(rawData);
-            }
-
-            Stamp($"ended.");
-        }
-
-        private IEnumerable<IFilter> ExtractFilter()
-        {
-            var currentDate = DateTime.Now;
-            var initialYear = int.Parse(Configuration.TryGet(CrawlerInitialYearConfigKey) ?? $"{currentDate.Year}");
-
-            while (initialYear <= currentDate.Year)
-            {
-                for (int i = 1; i <= 12; ++i)
+                while (initialYear <= currentDate.Year)
                 {
-                    if (initialYear == currentDate.Year && i > currentDate.Month)
-                        break;
+                    for (int i = 1; i <= 12; ++i)
+                    {
+                        if (initialYear == currentDate.Year && i > currentDate.Month)
+                            break;
 
-                    yield return Filter.Create().AddParameter("data", $"{i.ToString().PadLeft(2, '0')}/{initialYear}");
+                        yield return Filter.Create().AddParameter("data", $"{i.ToString().PadLeft(2, '0')}/{initialYear}");
+                    }
+
+                    ++initialYear;
                 }
-
-                ++initialYear;
             }
+
+            return Task.Run(() => ExtractFilter().ToList());
         }
     }
 }

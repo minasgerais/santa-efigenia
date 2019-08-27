@@ -25,37 +25,11 @@ namespace Sauron.Runner.Tasks
             ILogger<RawDataScheduledTask> logger) : base(configuration, webCrawler, rawDataRepository, logger)
         { }
 
-        public override async Task ExecuteAsync()
-        {
-            Stamp($"{nameof(DetailRawDataScheduledTask)} started.");
-
-            Stamp("Extracting filters.");
-            var filters = await ExtractFilterAsync();
-
-            foreach (var item in filters)
-            {
-                Stamp("Extracting raw data.");
-                var rawData = await ExtractRawDataAsync(item);
-
-                Stamp($"Saving raw data:", rawData);
-                await AddRawDataIfNotExtistAsync(rawData);
-            }
-
-            Stamp($"ended.");
-        }
-
-        private Task<List<RawData>> GetAllGlobalRawDataAsync()
-        {
-            return GetAllRawDataFromAnotherCollectionAsync(
-                    Configuration.TryGet(GlobalCollectionConfigKey)
-                );
-        }
-
-        private async Task<List<IFilter>> ExtractFilterAsync()
+        public override async Task<List<IFilter>> ExtractFiltersAsync()
         {
             var result = new List<IFilter>();
 
-            var rawData = await GetAllGlobalRawDataAsync();
+            var rawData = await GetAllRawDataAsync();
 
             foreach (var data in rawData)
             {
@@ -81,6 +55,13 @@ namespace Sauron.Runner.Tasks
             }
 
             return result;
+        }
+
+        protected override Task<List<RawData>> GetAllRawDataAsync()
+        {
+            return GetAllRawDataFromAnotherCollectionAsync(
+                    Configuration.TryGet(GlobalCollectionConfigKey)
+                );
         }
     }
 }
