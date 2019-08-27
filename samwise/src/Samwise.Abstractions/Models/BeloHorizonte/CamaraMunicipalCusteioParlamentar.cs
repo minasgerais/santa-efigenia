@@ -6,6 +6,6 @@ namespace Samwise.Abstractions.Models.BeloHorizonte
 
         public string Despesa { get; set; }
 
-        public decimal Valor { get; set; }
+        public string Valor { get; set; }
     }
 }

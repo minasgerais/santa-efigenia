@@ -21,10 +21,20 @@ namespace Samwise.Parsers.UnitTests.Parsers.BeloHorizonte
         [Fact]
         public void Deve_Obter_Informacoes_HTML()
         {
+            var resultadoEsperado = new List<CamaraMunicipalCusteioParlamentar>
+            {
+                new CamaraMunicipalCusteioParlamentar
+                {
+                    Nome = "Bim da Ambulância",
+                    Despesa = "Material de Escritório",
+                    Valor = "R$135,92"
+                }
+            };
             var htmlDocumento = new HtmlDocument();
             htmlDocumento.LoadHtml(CamaraMunicipalCusteioParlamentarParseFixture.Html);
             var resultado = _parseData.ParseData(htmlDocumento);
             resultado.Should().NotBeNull();
+            resultado.Should().BeEquivalentTo(resultadoEsperado);
         }
         
     }

@@ -20,8 +20,4 @@
       <ProjectReference Include="..\Samwise.Base\Samwise.Base.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Services" />
-    </ItemGroup>
-
 </Project>
