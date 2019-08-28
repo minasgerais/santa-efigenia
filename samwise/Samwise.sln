@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samwise.Parsers", "src\Samw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samwise.Base", "tests\Samwise.Base\Samwise.Base.csproj", "{671B2FFD-215C-4EFB-81C1-88A11CDB4855}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samwise.Parsers.UnitTests", "tests\Samwise.Parsers.UnitTests\Samwise.Parsers.UnitTests.csproj", "{73E71013-BB2F-4D2B-B5BF-FA90FCF487B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samwise.UnitTests", "tests\Samwise.UnitTests\Samwise.UnitTests.csproj", "{73E71013-BB2F-4D2B-B5BF-FA90FCF487B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samwise.Services", "src\Samwise.Services\Samwise.Services.csproj", "{2FE53F1E-DFDB-426D-8C16-069047EE3D67}"
 EndProject
