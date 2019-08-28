@@ -8,7 +8,7 @@ using Samwise.Parsers.BeloHorizonte;
 
 namespace Samwise.Parsers
 {
-    public static class Startup
+    public static class Bootstrap
     {
         public static IServiceCollection AddParsers(this IServiceCollection services)
         {

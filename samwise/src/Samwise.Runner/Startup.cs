@@ -3,10 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Samwise.Orchestrator
+namespace Samwise.Runner
 {
-    // TODO avaliar um injetor MorganFreeman abstraido para as aplicações
-    public class Startup : IStartup
+    public class Startup: IStartup
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {

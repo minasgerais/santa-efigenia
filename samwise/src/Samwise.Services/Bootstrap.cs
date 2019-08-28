@@ -7,7 +7,7 @@ using Samwise.Abstractions.Services;
 
 namespace Samwise.Services
 {
-    public static class Startup
+    public static class Bootstrap
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {

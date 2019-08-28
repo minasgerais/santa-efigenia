@@ -4,7 +4,7 @@ using Samwise.Abstractions.Repositories;
 
 namespace Samwise.Repositories.MongoDB
 {
-    public static class Startup
+    public static class Bootstrap
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {

@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Samwise.Abstractions\Samwise.Abstractions.csproj"/>
+        <ProjectReference Include="..\Samwise.Abstractions\Samwise.Abstractions.csproj" />
     </ItemGroup>
 
 
