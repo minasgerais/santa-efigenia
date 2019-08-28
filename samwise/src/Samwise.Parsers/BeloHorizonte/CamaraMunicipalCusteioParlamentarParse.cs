@@ -17,13 +17,13 @@ namespace Samwise.Parsers.BeloHorizonte
         public IEnumerable<CamaraMunicipalCusteioParlamentar> ParseData(HtmlDocument data)
         {
             return data.DocumentNode.SelectNodes(TabelaSelectorRoot)
-                .Where(lnq => lnq.NodeType != HtmlNodeType.Text)
+                ?.Where(lnq => lnq.NodeType != HtmlNodeType.Text)
                 .Select(lnq => new CamaraMunicipalCusteioParlamentar
                 {
-                    Nome = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTitleDespesa)).InnerText.Trim(),
-                    Despesa = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTitleDetalhamento)).InnerText.Trim(),
-                    Valor = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTileValor)).InnerText.Trim()
-                });
+                    Name = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTitleDespesa)).InnerText.Trim(),
+                    Expanse = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTitleDetalhamento)).InnerText.Trim(),
+                    Value = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTileValor)).InnerText.Trim()
+                }) ?? new List<CamaraMunicipalCusteioParlamentar>();
         }
     }
 }

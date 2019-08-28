@@ -7,7 +7,7 @@ using Samwise.Base.Fixtures;
 using Samwise.Parsers.BeloHorizonte;
 using Xunit;
 
-namespace Samwise.Parsers.UnitTests.Parsers.BeloHorizonte
+namespace Samwise.UnitTests.Parsers.BeloHorizonte
 {
     public class CamaraMunicipalCusteioParlamentarParseUnitTest: IClassFixture<CamaraMunicipalCusteioParlamentarParseFixture>
     {
@@ -20,15 +20,21 @@ namespace Samwise.Parsers.UnitTests.Parsers.BeloHorizonte
             _parseData = new CamaraMunicipalCusteioParlamentarParse();
         }
 
-        [Fact]
-        public void Deve_Obter_Informacoes_HTML()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(20)]
+        public void Should_Get_Informations_From_Html(int amountElementsToGenerate)
         {
-            var (resultadoEsperado, htmlTabela) = _fixture.GerarDadosFake(1);
-            var htmlDocumento = new HtmlDocument();
-            htmlDocumento.LoadHtml(htmlTabela);
-            var resultado = _parseData.ParseData(htmlDocumento);
-            resultado.Should().NotBeNull();
-            resultado.Should().BeEquivalentTo(resultadoEsperado);
+            var (expectedResult, tableHtml) = _fixture.GenerateFakeData(amountElementsToGenerate);
+            var htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(tableHtml);
+            var result = _parseData.ParseData(htmlDocument);
+            result.Should().NotBeNull();
+            result.Should().BeEquivalentTo(expectedResult);
         }
         
     }
