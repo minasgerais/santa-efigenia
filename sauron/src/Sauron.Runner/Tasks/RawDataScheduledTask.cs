@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Sauron.Abstractions.Crawlers;
+using Sauron.Abstractions.Extensions;
 using Sauron.Abstractions.Models;
 using Sauron.Abstractions.Repositories;
-using Sauron.Runner.Extensions;
 using Sauron.Scheduling.Tasks;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,7 +25,7 @@ namespace Sauron.Runner.Tasks
         protected abstract string Collection { get; }
 
         protected RawDataScheduledTask(IConfiguration configuration, IWebCrawler<RawData> webCrawler, IRawDataRepository rawDataRepository,
-            ILogger<RawDataScheduledTask> logger) : base(configuration)
+            ILogger<RawDataScheduledTask> logger) : base(configuration, logger)
         {
             (Configuration, _webCrawler, _rawDataRepository, _logger) = (configuration, webCrawler, rawDataRepository, logger);
         }
@@ -44,8 +44,6 @@ namespace Sauron.Runner.Tasks
 
         public override async Task ExecuteAsync()
         {
-            Stamp($"{GetType().Name} started.");
-
             var filters = await ExtractFiltersAsync();
 
             foreach (var item in filters)
@@ -62,8 +60,6 @@ namespace Sauron.Runner.Tasks
                     Stamp($"raw data already exists");
                 }
             }
-
-            Stamp($"{GetType().Name} ended.");
         }
 
         protected Task<RawData> ExtractRawDataAsync(IFilter filter)

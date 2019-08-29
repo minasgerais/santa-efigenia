@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sauron.Abstractions;
 using Sauron.Crawlers;
 using Sauron.Repositories.MongoDB;
 using Sauron.Scheduling;
@@ -17,7 +18,7 @@ namespace Sauron.Orchestrator
 
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
-            (Configuration, HostingEnvironment) = (configuration, hostingEnvironment);
+            (Globals.Configuration, Configuration, HostingEnvironment) = (configuration, configuration, hostingEnvironment);
         }
 
         public virtual void ConfigureServices(IServiceCollection services) { }

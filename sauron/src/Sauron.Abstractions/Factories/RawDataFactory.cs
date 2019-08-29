@@ -7,6 +7,8 @@ namespace Sauron.Abstractions.Factories
 {
     public static class RawDataFactory
     {
+        private const string UtcHoursOffsetConfigKey = "SAURON_UTC_HOURS_OFFSET";
+
         public static RawData CreateRawData(string url, IFilter filter, string rawContent)
         {
             string buildRawDataId()
@@ -19,7 +21,7 @@ namespace Sauron.Abstractions.Factories
                 Id = buildRawDataId(),
                 Url = url,
                 Filter = filter.AsQueryString(),
-                Visited = DateTimeOffset.Now,
+                Visited = DateTime.Now.ToDateTimeOffset(Globals.Configuration.TryGet<double>(UtcHoursOffsetConfigKey)),
                 RawContent = rawContent
             };
         }
