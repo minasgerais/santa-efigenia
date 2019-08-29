@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Sauron.Runner.Extensions
+namespace Sauron.Abstractions.Extensions
 {
     public static class ILoggerExtensions
     {

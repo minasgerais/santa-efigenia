@@ -1,5 +1,6 @@
 ﻿using FluentScheduler;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Sauron.Abstractions.Extensions;
 using System;
 using System.Threading.Tasks;
@@ -8,17 +9,29 @@ namespace Sauron.Scheduling.Tasks
 {
     public abstract class ScheduledTask : Registry
     {
+
+        protected virtual string Name { get => nameof(ScheduledTask); }
+
         protected abstract string Scheduler { get; }
 
         protected int Interval { get; }
 
         public abstract Task ExecuteAsync();
 
-        public ScheduledTask(IConfiguration configuration)
+        public ScheduledTask(IConfiguration configuration, ILogger<ScheduledTask> logger)
         {
             Interval = CalculateInterval(configuration);
-            Schedule(async () => await ExecuteAsync()).ToRunNow().AndEvery(Interval).Days();
+            Schedule(async () => await StartAsync(logger)).ToRunNow().AndEvery(Interval).Days();
             NonReentrantAsDefault();
+        }
+
+        private async Task StartAsync(ILogger logger)
+        {
+            logger.Stamp($"Scheduled Task [{Name}] started.");
+
+            await ExecuteAsync();
+
+            logger.Stamp($"Scheduled Task [{Name}] finished.");
         }
 
         private int CalculateInterval(IConfiguration configuration)

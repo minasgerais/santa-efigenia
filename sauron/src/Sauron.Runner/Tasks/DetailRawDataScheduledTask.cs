@@ -19,7 +19,10 @@ namespace Sauron.Runner.Tasks
         private const string CollectionConfigKey = "SAURON_MONGO_DB_DATABASE_DETAIL_COLLECTION";
 
         protected override string Source { get => Configuration.TryGet(SourceConfigKey); }
+
         protected override string Collection { get => Configuration.TryGet(CollectionConfigKey); }
+
+        protected override string Name { get => "DETAILED RAW DATA EXTRACTOR"; }
 
         public DetailRawDataScheduledTask(IConfiguration configuration, IWebCrawler<RawData> webCrawler, IRawDataRepository rawDataRepository,
             ILogger<RawDataScheduledTask> logger) : base(configuration, webCrawler, rawDataRepository, logger)
