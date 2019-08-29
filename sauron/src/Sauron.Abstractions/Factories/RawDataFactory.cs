@@ -11,11 +11,6 @@ namespace Sauron.Abstractions.Factories
 
         public static RawData CreateRawData(string url, IFilter filter, string rawContent)
         {
-            TimeSpan GetUtfOffset()
-            {
-                return new TimeSpan(Globals.Configuration.TryGet<int>(UtcHoursOffsetConfigKey), 0, 0);
-            }
-
             string buildRawDataId()
             {
                 return $"{url}{filter.AsQueryString()}{rawContent}".GetCrc();
@@ -26,7 +21,7 @@ namespace Sauron.Abstractions.Factories
                 Id = buildRawDataId(),
                 Url = url,
                 Filter = filter.AsQueryString(),
-                Visited = new DateTimeOffset(DateTime.Now, GetUtfOffset()),
+                Visited = DateTime.Now.ToDateTimeOffset(Globals.Configuration.TryGet<double>(UtcHoursOffsetConfigKey)),
                 RawContent = rawContent
             };
         }
