@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 
 if [ -z $1 ] 
   then
@@ -6,13 +6,20 @@ if [ -z $1 ]
     exit 1
 fi
 
-echo "Builder v.1.0.1"
-
 echo "Building docker image with tag: $1"
 docker build -t minasgerais/sauron:$1 .
 
 echo "Pushing image with tag: $1 to docker hub"
 docker tag minasgerais/sauron:$1 minasgerais/sauron:$1
 docker push minasgerais/sauron:$1
+
+echo "Tag this build on github"
+git tag -d $1
+git push origin :refs/tags/$1
+
+git tag -a -m "canary release, builded on $(date +'%Y-%m-%d %H:%M:%S')" $1
+git push origin $1
+
+echo "Build finished"
 
 exit 0
