@@ -21,7 +21,7 @@ namespace Samwise.Parsers.BeloHorizonte
                 .Select(lnq => new CamaraMunicipalCusteioParlamentar
                 {
                     Name = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTitleDespesa)).InnerText.Trim(),
-                    Expanse = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTitleDetalhamento)).InnerText.Trim(),
+                    DetailExpanse = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTitleDetalhamento)).InnerText.Trim(),
                     Value = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTileValor)).InnerText.Trim()
                 }) ?? new List<CamaraMunicipalCusteioParlamentar>();
         }

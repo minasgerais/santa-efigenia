@@ -7,7 +7,7 @@ using Samwise.Base.Extensions;
 
 namespace Samwise.Base.Fixtures
 {
-    public class CamaraMunicipalCusteioParlamentarParseFixture
+    public class CamaraMunicipalCusteioParlamentarParseFixture: BaseFixture
     {
         private readonly Faker _faker = BogusExtensions.FakerPtBr;
 
@@ -22,7 +22,7 @@ namespace Samwise.Base.Fixtures
                 expectedResult.Add(new CamaraMunicipalCusteioParlamentar
                 {
                     Name = name,
-                    Expanse = ExpenseDetailing,
+                    DetailExpanse = ExpenseDetailing,
                     Value = $"R${_faker.Finance.Amount()}"
                 });
             }

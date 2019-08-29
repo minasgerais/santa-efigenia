@@ -21,6 +21,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\Samwise.Abstractions\Samwise.Abstractions.csproj" />
       <ProjectReference Include="..\..\src\Samwise.Parsers\Samwise.Parsers.csproj" />
+      <ProjectReference Include="..\..\src\Samwise.Repositories.MongoDB\Samwise.Repositories.MongoDB.csproj" />
       <ProjectReference Include="..\Samwise.Base\Samwise.Base.csproj" />
     </ItemGroup>
 
