@@ -46,7 +46,7 @@ services:
       - sta_efigenia_network
   
   sauron:
-    image: santa-efigenia/sauron:1.0-alpha
+    image: minasgerais/sauron:canary
     container_name: sta_efigenia_sauron
     environment:
       SAURON_TASK_SCHEDULER_DAYS_INTERVAL: 1
