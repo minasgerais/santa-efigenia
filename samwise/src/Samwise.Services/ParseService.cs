@@ -14,11 +14,12 @@ namespace Samwise.Services
         private const string SamwiseDatabaseCollectionSamwiseDatabaseCollection = "SAMWISE_MONGO_DB_DATABASE_COLLECTION";
         
         private readonly IParseData<TDataInput, TResult> _parseData;
-        private readonly IDataRepository<SamwiseDataRepository> _dataRepository;
+        private readonly IDataRepository<SamwiseDataRepository> _samwiseDataRepository;
+        private readonly IDataRepository<SauronDataRepository> _sauronDataRepository;
         private readonly IConfiguration _configuration;
 
-        public ParseService(IConfiguration configuration, IParseData<TDataInput, TResult> parseData, IDataRepository<SamwiseDataRepository> dataRepository) =>
-            (_configuration, _parseData, _dataRepository) = (configuration, parseData, dataRepository);
+        public ParseService(IConfiguration configuration, IParseData<TDataInput, TResult> parseData, IDataRepository<SamwiseDataRepository> samwiseDataRepository, IDataRepository<SauronDataRepository> sauronDataRepository) =>
+            (_configuration, _parseData, _samwiseDataRepository, _sauronDataRepository) = (configuration, parseData, samwiseDataRepository, sauronDataRepository);
 
         public Task ExecuteParseAsync()
         {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Samwise.Abstractions.Repositories
 {
+    // TODO Avaliar se é possível definir contrato e uma implementação base para acesso a dados via mongo no MorganFreeamam
     public interface IDataRepository<TRepository>
     {
         Task<List<TData>> GetAllAsync<TData>(string collectionName);

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Samwise.Abstractions.Extensions
 {
+    // TODO Colocar esse método extensivo para IConfiguration no MorganFreemam
     public static class ConfigurationExtensions
     {
         public static string TryGet(this IConfiguration configuration, string key)

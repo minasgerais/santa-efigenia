@@ -9,6 +9,7 @@ using Samwise.Services;
 
 namespace Samwise.Orchestrator
 {
+    // TODO Criar startup base para aplicações no MorganFreeamam
     public abstract class SamwiseStartup: IStartup
     {
         public IConfiguration Configuration { get; }

@@ -1,4 +1,3 @@
-using Samwise.Abstractions.Repositories;
 using Samwise.Abstractions.Repositories.Configurations;
 
 namespace Samwise.Repositories.MongoDB
