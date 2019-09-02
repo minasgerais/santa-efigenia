@@ -5,7 +5,7 @@ using Bogus;
 using Samwise.Abstractions.Models.BeloHorizonte;
 using Samwise.Base.Extensions;
 
-namespace Samwise.Base.Fixtures
+namespace Samwise.Base.Fixtures.Parsers
 {
     public class CamaraMunicipalCusteioParlamentarParseFixture: BaseFixture
     {
@@ -13,7 +13,7 @@ namespace Samwise.Base.Fixtures
 
         private const string ExpenseDetailing = "Detalhamento despesa FAKE";
         
-        public (IEnumerable<CamaraMunicipalCusteioParlamentar> resultadoEsperado, string htmlTabelaFake) GenerateFakeData(int amountElements)
+        public (IEnumerable<CamaraMunicipalCusteioParlamentar> expectedResult, string htmlTabelaFake) GenerateFakeData(int amountElements)
         {
             var name = _faker.Name.FullName();
             var expectedResult = new List<CamaraMunicipalCusteioParlamentar>();

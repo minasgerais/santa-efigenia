@@ -13,5 +13,5 @@
     <ItemGroup>
       <ProjectReference Include="..\Samwise.Orchestrator\Samwise.Orchestrator.csproj" />
     </ItemGroup>
-
+    
 </Project>

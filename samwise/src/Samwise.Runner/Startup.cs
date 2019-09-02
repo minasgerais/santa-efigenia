@@ -15,12 +15,10 @@ namespace Samwise.Runner
         
         public override void ConfigureServices(IServiceCollection services)
         {
-            throw new NotImplementedException();
         }
 
         public override void Configure(IApplicationBuilder app)
         {
-            throw new NotImplementedException();
         }
     }
 }

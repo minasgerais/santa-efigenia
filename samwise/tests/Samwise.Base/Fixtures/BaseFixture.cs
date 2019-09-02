@@ -12,7 +12,7 @@ namespace Samwise.Base.Fixtures
             InitializeConfiguration();
         }
 
-        protected virtual void InitializeConfiguration(string path = "appsettings.Development.json", bool optional = true, bool reloadOnChange = true)
+        protected virtual void InitializeConfiguration(string path = "appsettings.json", bool optional = true, bool reloadOnChange = true)
         {
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

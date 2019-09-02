@@ -3,7 +3,7 @@ using FluentAssertions;
 using HtmlAgilityPack;
 using Samwise.Abstractions.Models.BeloHorizonte;
 using Samwise.Abstractions.Parsers;
-using Samwise.Base.Fixtures;
+using Samwise.Base.Fixtures.Parsers;
 using Samwise.Parsers.BeloHorizonte;
 using Xunit;
 

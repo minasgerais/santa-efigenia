@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Samwise.Abstractions.Services;
 
 namespace Samwise.Runner
 {
@@ -7,10 +9,13 @@ namespace Samwise.Runner
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var builder = CreateWebHostBuilder(args).Build();
+            var serviceProvider = builder.Services;
+
+            var service = serviceProvider.GetRequiredService<IParseService>();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
     }

@@ -2,70 +2,79 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
-using Samwise.Abstractions.Extensions;
 using Samwise.Abstractions.Repositories;
+using Samwise.Abstractions.Repositories.Configurations;
 
 namespace Samwise.Repositories.MongoDB
 {
-    public class DataRepository: IDataRepository
+    public abstract class DataRepository<TRepository> : IDataRepository<TRepository>
     {
-        private const string mongoAuthMech = "SCRAM-SHA-1";
-        private const string MongoAdminDbN = "admin";
-        private const string MongoUsername = "SAMWISE_MONGO_DB_USERNAME";
-        private const string MongoPassword = "SAMWISE_MONGO_DB_PASSWORD";
-        private const string MongoDatabase = "SAMWISE_MONGO_DB_DATABASE";
-        private const string MongoConTcpIp = "SAMWISE_MONGO_DB_CONTCPIP";
-        private const string MongoConnPort = "SAMWISE_MONGO_DB_CONNPORT";
+        protected readonly IMongoDatabase MongoDatabase;
 
-        private readonly IMongoDatabase _mongoDatabase;
+        protected const string MongoAuthMech = "SCRAM-SHA-1";
 
-        public DataRepository(IConfiguration configuration)
+        public DataRepository(MongoConfiguration<TRepository> configuration)
         {
             var settings = new MongoClientSettings
             {
                 Credential = new MongoCredential(
-                    mongoAuthMech,
-                    new MongoInternalIdentity(MongoAdminDbN, configuration.TryGet(MongoUsername)),
-                    new PasswordEvidence(configuration.TryGet(MongoPassword))
+                    MongoAuthMech,
+                    new MongoInternalIdentity(configuration.MongoAdminDbN, configuration.MongoUsername),
+                    new PasswordEvidence(configuration.MongoPassword)
                 ),
-                Server = new MongoServerAddress(configuration.TryGet(MongoConTcpIp), configuration.TryGet<int>(MongoConnPort))
+                Server = new MongoServerAddress(configuration.MongoConTcpIp, configuration.MongoConnPort)
             };
 
-            var mongoClient = new MongoClient(settings);
-
-            _mongoDatabase = mongoClient.GetDatabase(configuration.TryGet(MongoDatabase));
+            MongoDatabase = new MongoClient(settings).GetDatabase(configuration.MongoDatabase);
         }
 
         public Task<List<TData>> GetAllAsync<TData>(string collectionName)
         {
-            throw new NotImplementedException();
+            return GetCollection<TData>(collectionName).Find(lnq => true).ToListAsync();
+        }
+
+        public Task<List<TData>> GetAllAsync<TData>(string collectionName, Expression<Func<TData, bool>> expression)
+        {
+            return GetCollection<TData>(collectionName).Find(expression).ToListAsync();
         }
 
         public Task<TData> GetAsync<TData>(string collectionName, Expression<Func<TData, bool>> expression)
         {
-            throw new NotImplementedException();
+            return GetCollection<TData>(collectionName).Find(expression).FirstOrDefaultAsync();
+        }
+
+        public Task SaveOrUpdateAsync<TData>(string collectionName, TData rawData, Expression<Func<TData, bool>> expression)
+        {
+            return GetAsync(collectionName, expression)
+                .ContinueWith(
+                    (getAsync) => getAsync.Result == null
+                        ? SaveAsync(collectionName, rawData)
+                        : UpdateAsync(collectionName, rawData, expression)
+                );
         }
 
         public Task SaveAsync<TData>(string collectionName, TData rawData)
         {
-            throw new NotImplementedException();
+            return GetCollection<TData>(collectionName).InsertOneAsync(rawData)
+                .ContinueWith(
+                    (insertOneAsync) => (insertOneAsync.Exception == default)
+                );
         }
 
-        public Task UpdateAsync<TData>(string collectionName, TData rawData)
+        public Task UpdateAsync<TData>(string collectionName, TData rawData, Expression<Func<TData, bool>> expression)
         {
-            throw new NotImplementedException();
+            return GetCollection<TData>(collectionName).ReplaceOneAsync(expression, rawData);
         }
 
         public Task DeleteAsync<TData>(string collectionName, Expression<Func<TData, bool>> expression)
         {
-            throw new NotImplementedException();
+            return GetCollection<TData>(collectionName).DeleteOneAsync(expression);
         }
-        
+
         private IMongoCollection<TData> GetCollection<TData>(string collectionName)
         {
-            return _mongoDatabase.GetCollection<TData>(collectionName);
+            return MongoDatabase.GetCollection<TData>(collectionName);
         }
     }
 }

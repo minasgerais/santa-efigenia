@@ -21,7 +21,7 @@ namespace Samwise.Orchestrator
         IServiceProvider IStartup.ConfigureServices(IServiceCollection services)
         {
             services.AddParsers()
-                .AddRepositories()
+                .AddRepositories(Configuration)
                 .AddServices();
             
             ConfigureServices(services);
