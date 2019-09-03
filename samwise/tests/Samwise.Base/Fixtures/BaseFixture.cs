@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,24 +10,25 @@ namespace Samwise.Base.Fixtures
 {
     public abstract class BaseFixture
     {
-        public T Resolve<T>() => _services.GetService<T>();
-        public ICollection<T> ResolveList<T>() => _services.GetServices<T>().ToList();
-        public HttpClient Client => _testServer.CreateClient();
-        public IConfiguration Configuration => _services.GetService<IConfiguration>();
+        public T Resolve<T>() => Services.GetService<T>();
+        public ICollection<T> ResolveList<T>() => Services.GetServices<T>().ToList();
+        public IConfiguration Configuration => Services.GetService<IConfiguration>();
 
-        protected TestServer TestServer => _testServer ?? (_testServer = new TestServer(CreateBuilder()));
+        
         protected Action<WebHostBuilderContext, IConfigurationBuilder> ConfigureAppConfiguration { get; set; }
         protected Action<IApplicationBuilder> Configure { get; set; }
         protected Action<WebHostBuilderContext, IServiceCollection> ConfigureServices { get; set; }
-
-        protected virtual Type Startup { get; set; }
-        protected virtual string Environment => "Test";
+        
+        protected IWebHost WebHost=> _webHost ?? (_webHost = CreateBuilder());
+        
+        protected virtual Type Startup { get; }
+        protected virtual  string Environment => "Test";
         protected virtual string PathJsonFile => "appsettings.json";
         protected virtual bool JsonFileOption => false;
         protected virtual bool JsonFileReloadOnChange => true;
-
-        private IServiceProvider _services => TestServer.Host.Services;
-        private TestServer _testServer;
+        
+        private IServiceProvider Services => WebHost.Services;
+        private IWebHost _webHost;
 
 
         public BaseFixture()
@@ -40,7 +39,7 @@ namespace Samwise.Base.Fixtures
         }
 
 
-        protected WebHostBuilder CreateBuilder()
+        protected IWebHost CreateBuilder()
         {
             WebHostBuilder hostBuilder = new WebHostBuilder();
             hostBuilder.UseEnvironment(Environment);
@@ -53,7 +52,7 @@ namespace Samwise.Base.Fixtures
             hostBuilder.Configure(Configure);
             if (Startup != null)
                 hostBuilder.UseStartup(Startup);
-            return hostBuilder;
+            return hostBuilder.Build();
         }
     }
 }

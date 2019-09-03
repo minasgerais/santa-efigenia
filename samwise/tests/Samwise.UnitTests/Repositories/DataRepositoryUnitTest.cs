@@ -52,13 +52,13 @@ namespace Samwise.UnitTests.Repositories
         {
             var element = new CamaraMunicipalCusteioParlamentar
             {
-                Id = "2F310C87",
+                IdDocumentExtracted = "2F310C87",
                 Name = "Teste",
                 DetailExpanse = "Detail Expanse",
                 Value = "R$12,21"
             };
 
-            _dataRepository.Invoking(async lnq => await lnq.SaveOrUpdateAsync(_collectionName, element, t => t.Id == "2F310C87"))
+            _dataRepository.Invoking(async lnq => await lnq.SaveOrUpdateAsync(_collectionName, element, t => t.IdDocumentExtracted == "2F310C87"))
                 .Should().NotThrow();
         }
         
@@ -67,7 +67,7 @@ namespace Samwise.UnitTests.Repositories
         {
             var element = new CamaraMunicipalCusteioParlamentar
             {
-                Id = "2F310C87",
+                IdDocumentExtracted = "2F310C87",
                 Name = "Teste",
                 DetailExpanse = "Detail Expanse",
                 Value = "R$12,21"
@@ -82,20 +82,20 @@ namespace Samwise.UnitTests.Repositories
         {
             var element = new CamaraMunicipalCusteioParlamentar
             {
-                Id = "2F310C84",
+                IdDocumentExtracted = "2F310C84",
                 Name = "Teste Update",
                 DetailExpanse = "Detail Expanse",
                 Value = "R$12,21"
             };
 
-            _dataRepository.Invoking(async lnq => await lnq.UpdateAsync(_collectionName, element, t => t.Id == "2F310C84"))
+            _dataRepository.Invoking(async lnq => await lnq.UpdateAsync(_collectionName, element, t => t.IdDocumentExtracted == "2F310C84"))
                 .Should().NotThrow();
         }
         
         [Fact]
         public void Shoul_Delete_Element_In_Collection()
         {
-            _dataRepository.Invoking(async lnq => await lnq.DeleteAsync<CamaraMunicipalCusteioParlamentar>(_collectionName, t => t.Id == "2F310C84"))
+            _dataRepository.Invoking(async lnq => await lnq.DeleteAsync<CamaraMunicipalCusteioParlamentar>(_collectionName, t => t.IdDocumentExtracted == "2F310C84"))
                 .Should().NotThrow();
         }
     }

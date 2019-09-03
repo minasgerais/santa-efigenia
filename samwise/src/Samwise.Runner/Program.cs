@@ -13,6 +13,7 @@ namespace Samwise.Runner
             var serviceProvider = builder.Services;
 
             var service = serviceProvider.GetRequiredService<IParseService>();
+            service.ExecuteParseAsync();
         }
 
         private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
