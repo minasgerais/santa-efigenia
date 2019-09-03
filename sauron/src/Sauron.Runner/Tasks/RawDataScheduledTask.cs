@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Elastic.Apm.Api;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Sauron.Abstractions.Crawlers;
 using Sauron.Abstractions.Extensions;
 using Sauron.Abstractions.Models;
 using Sauron.Abstractions.Repositories;
+using Sauron.Apm.Tracing;
 using Sauron.Scheduling.Tasks;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -44,22 +46,37 @@ namespace Sauron.Runner.Tasks
 
         public override async Task ExecuteAsync()
         {
-            var filters = await ExtractFiltersAsync();
+            await Transaction.Capture(Name, "ScheduledTask", async (currentTransaction) =>
+            {
+                var filters = await ExtractFiltersAsync();
 
-            foreach (var item in filters)
+                foreach (var item in filters)
+                    await ProcessFilterAsync(item, currentTransaction);
+            });
+        }
+
+        private Task ProcessFilterAsync(IFilter filter, ITransaction transaction)
+        {
+            return transaction.CaptureSpan("ProcessFilterAsync", "AsyncMethod", async (span) =>
             {
                 Stamp("Extracting raw data.");
-                var rawData = await ExtractRawDataAsync(item);
+                var rawData = await ExtractRawDataAsync(filter);
+
+                Stamp("APM logging raw data.");
+                foreach (var kv in rawData.ToDictionary())
+                    span.Context.Labels[kv.Key] = kv.Value;
 
                 if (await AddRawDataIfNotExtistAsync(rawData))
                 {
                     Stamp($"Raw data saved:", rawData);
+                    span.Context.Labels["Saved"] = "True";
                 }
                 else
                 {
+                    span.Context.Labels["Saved"] = "False";
                     Stamp($"raw data already exists");
                 }
-            }
+            });
         }
 
         protected Task<RawData> ExtractRawDataAsync(IFilter filter)

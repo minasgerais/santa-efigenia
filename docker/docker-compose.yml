@@ -11,7 +11,7 @@ services:
     ports:
       - 8082:27017
     volumes:
-      - /home/volumes/mongodb/data/db:/data/db
+      - sta_efigenia_mongo_vl:/data/db
     networks: 
       - sta_efigenia_network
 
@@ -41,31 +41,105 @@ services:
       - 8083:5672
       - 8084:15672
     volumes:
-      - /home/volumes/rabbitmq/var/lib:/var/lib/rabbitmq
+      - sta_efigenia_rabbitmq_vl:/var/lib/rabbitmq
     networks: 
       - sta_efigenia_network
-  
-  sauron:
-    image: minasgerais/sauron:canary
-    container_name: sta_efigenia_sauron
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+    container_name: sta_efigenia_elasticsearch
     environment:
-      SAURON_UTC_HOURS_OFFSET: 0
-      SAURON_TASK_SCHEDULER_DAYS_INTERVAL: 1
-      SAURON_CRAWLER_BASE_URL: https://www.cmbh.mg.gov.br/sites/all/modules/execucao_orcamentaria_custeio
-      SAURON_CRAWLER_INITIAL_YEAR: 2016
-      SAURON_CRAWLER_GLOBAL_SOURCE: pesquisar.php
-      SAURON_CRAWLER_DETAIL_SOURCE: detalhar.php
-      SAURON_MONGO_DB_USERNAME: root
-      SAURON_MONGO_DB_PASSWORD: root
-      SAURON_MONGO_DB_CONTCPIP: sta_efigenia_mongo
-      SAURON_MONGO_DB_CONNPORT: 27017
-      SAURON_MONGO_DB_DATABASE: sauron
-      SAURON_MONGO_DB_DATABASE_GLOBAL_COLLECTION: global
-      SAURON_MONGO_DB_DATABASE_DETAIL_COLLECTION: detail
-    links:
-      - mongo
-    networks: 
+      - discovery.type=single-node
+      - cluster.name=sta-efigenia-elasticsearch-cluster
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 8085:9200
+    volumes:
+      - sta_efigenia_elasticsearch_vl:/usr/share/elasticsearch/data
+    networks:
       - sta_efigenia_network
+
+  elasticapm:
+    image: minasgerais/elastic-apm-server:canary
+    container_name: sta_efigenia_elasticapm
+    links:
+      - elasticsearch
+    ports:
+      - 8086:8200
+    networks:
+      - sta_efigenia_network
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.3.1
+    container_name: sta_efigenia_kibana
+    links:
+      - elasticsearch
+      - elasticapm
+    ports:
+      - 8087:5601
+    networks:
+      - sta_efigenia_network
+    depends_on:
+      - elasticsearch
+      - elasticapm
+  
+  # sauron:
+  #   image: minasgerais/sauron:canary
+  #   container_name: sta_efigenia_sauron
+  #   environment:
+  #     SAURON_UTC_HOURS_OFFSET: 0
+  #     SAURON_TASK_SCHEDULER_DAYS_INTERVAL: 1
+  #     SAURON_CRAWLER_BASE_URL: https://www.cmbh.mg.gov.br/sites/all/modules/execucao_orcamentaria_custeio
+  #     SAURON_CRAWLER_INITIAL_YEAR: 2016
+  #     SAURON_CRAWLER_GLOBAL_SOURCE: pesquisar.php
+  #     SAURON_CRAWLER_DETAIL_SOURCE: detalhar.php
+  #     SAURON_MONGO_DB_USERNAME: root
+  #     SAURON_MONGO_DB_PASSWORD: root
+  #     SAURON_MONGO_DB_CONTCPIP: sta_efigenia_mongo
+  #     SAURON_MONGO_DB_CONNPORT: 27017
+  #     SAURON_MONGO_DB_DATABASE: sauron
+  #     SAURON_MONGO_DB_DATABASE_GLOBAL_COLLECTION: global
+  #     SAURON_MONGO_DB_DATABASE_DETAIL_COLLECTION: detail
+  #   links:
+  #     - mongo
+  #   networks: 
+  #     - sta_efigenia_network
+
+volumes:
+  sta_efigenia_mongo_vl:
+    driver: local
+
+  sta_efigenia_rabbitmq_vl:
+    driver: local
+  
+  sta_efigenia_elasticsearch_vl:
+    driver: local
+
+  # sta_efigenia_mongo_vl:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: /d/home/volumes/mongodb/data/db
+  #     o: bind
+
+  # sta_efigenia_rabbitmq_vl: 
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: /d/home/volumes/rabbitmq/var/lib
+  #     o: bind
+
+  # sta_efigenia_elasticsearch_node1_vl:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: /d/home/volumes/elasticsearch/node1/data
+  #     o: bind  
 
 networks: 
     sta_efigenia_network:

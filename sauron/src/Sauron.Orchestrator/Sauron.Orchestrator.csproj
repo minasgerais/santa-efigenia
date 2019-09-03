@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sauron.Abstractions\Sauron.Abstractions.csproj" />
+    <ProjectReference Include="..\Sauron.Apm\Sauron.Apm.csproj" />
     <ProjectReference Include="..\Sauron.Crawlers\Sauron.Crawlers.csproj" />
     <ProjectReference Include="..\Sauron.Repositories.MongoDB\Sauron.Repositories.MongoDB.csproj" />
     <ProjectReference Include="..\Sauron.Scheduling\Sauron.Scheduling.csproj" />

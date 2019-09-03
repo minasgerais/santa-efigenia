@@ -17,7 +17,7 @@ namespace Sauron.Runner
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddScheduledTask<GlobalRawDataScheduledTask>();
-            services.AddScheduledTask<DetailRawDataScheduledTask>();
+            //services.AddScheduledTask<DetailRawDataScheduledTask>();
         }
 
         public override void Configure(IApplicationBuilder app)
@@ -27,7 +27,7 @@ namespace Sauron.Runner
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                await context.Response.WriteAsync("I am Sauron, I see everything!");
             });
         }
     }
