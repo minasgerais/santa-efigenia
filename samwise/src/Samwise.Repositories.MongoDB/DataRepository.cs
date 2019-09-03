@@ -36,7 +36,7 @@ namespace Samwise.Repositories.MongoDB
 
         public Task<List<TData>> GetAllAsync<TData>(string collectionName, Expression<Func<TData, bool>> expression)
         {
-            return GetCollection<TData>(collectionName).Find(expression).ToListAsync();
+             return GetCollection<TData>(collectionName).Find(expression).ToListAsync();
         }
 
         public Task<TData> GetAsync<TData>(string collectionName, Expression<Func<TData, bool>> expression)
