@@ -37,20 +37,7 @@ namespace Samwise.Services
 
         public async Task ExecuteParseAsync()
         {
-            try
-            {
-                var listRawData =
-                    await _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionSauron,
-                        lnq => lnq.Parsed == default);
-                var y = listRawData;
-            }
-            catch(Exception ex)
-            {
-                
-            }
-            
+            var listRawData = await _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionSauron, lnq => lnq.Parsed == default);
         }
-        
-        
     }
 }
