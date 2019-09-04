@@ -25,6 +25,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "architecture", "architectur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sauron.Apm", "src\Sauron.Apm\Sauron.Apm.csproj", "{3968FD24-F8B5-4D1F-B760-195F39065730}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{5ADA31EE-25BD-4FCC-83EB-7FA2D56B8B57}"
+ProjectSection(SolutionItems) = preProject
+	Dockerfile = Dockerfile
+	build = build
+	README.md = README.md
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

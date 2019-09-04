@@ -6,6 +6,7 @@ using Sauron.Abstractions.Models;
 using Sauron.Abstractions.Repositories;
 using Sauron.Crawlers.UnitTests.Fakers;
 using System.Linq;
+using Sauron.Abstractions.Apm.Tracing;
 
 namespace Sauron.Crawlers.UnitTests.Fixtures
 {
@@ -26,16 +27,18 @@ namespace Sauron.Crawlers.UnitTests.Fixtures
             return new Mock<ILogger<T>>().Object;
         }
 
+        public IMonitor GetMonitor()
+        {
+            return new Mock<IMonitor>().Object;
+        }
+
         public IWebCrawler<RawData> CreateGlobalWebCrawler(int amount)
         {
             var mock = new Mock<IWebCrawler<RawData>>();
 
             mock
                 .Setup(m => m.ExtractAsync(It.IsAny<string>(), It.IsAny<IFilter>()))
-                .ReturnsAsync((string source, IFilter filter) =>
-                {
-                    return WebCrawlerResultFaker.GetGlobalRawDataFakeResult(amount, source, filter);
-                });
+                .ReturnsAsync((string source, IFilter filter) => { return WebCrawlerResultFaker.GetGlobalRawDataFakeResult(amount, source, filter); });
 
             return mock.Object;
         }
@@ -46,10 +49,7 @@ namespace Sauron.Crawlers.UnitTests.Fixtures
 
             mock
                 .Setup(m => m.ExtractAsync(It.IsAny<string>(), It.IsAny<IFilter>()))
-                .ReturnsAsync((string source, IFilter filter) =>
-                {
-                    return WebCrawlerResultFaker.GetDetailRawDataFakeResult(amount, source, filter);
-                });
+                .ReturnsAsync((string source, IFilter filter) => { return WebCrawlerResultFaker.GetDetailRawDataFakeResult(amount, source, filter); });
 
             return mock.Object;
         }

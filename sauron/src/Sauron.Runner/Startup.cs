@@ -12,7 +12,8 @@ namespace Sauron.Runner
     {
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
             : base(configuration, hostingEnvironment)
-        { }
+        {
+        }
 
         public override void ConfigureServices(IServiceCollection services)
         {
@@ -25,10 +26,7 @@ namespace Sauron.Runner
             if (HostingEnvironment.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("I am Sauron, I see everything!");
-            });
+            app.Run(async (context) => { await context.Response.WriteAsync("I am Sauron, I see everything!"); });
         }
     }
 }

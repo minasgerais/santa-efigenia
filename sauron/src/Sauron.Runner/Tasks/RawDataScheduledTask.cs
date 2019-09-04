@@ -9,6 +9,7 @@ using Sauron.Apm.Tracing;
 using Sauron.Scheduling.Tasks;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sauron.Abstractions.Apm.Tracing;
 
 namespace Sauron.Runner.Tasks
 {
@@ -17,74 +18,67 @@ namespace Sauron.Runner.Tasks
         private readonly IWebCrawler<RawData> _webCrawler;
         private readonly IRawDataRepository _rawDataRepository;
         private readonly ILogger _logger;
+        private readonly IMonitor _monitor;
 
         protected IConfiguration Configuration { get; }
 
-        protected override string Scheduler { get => "SAURON_TASK_SCHEDULER_DAYS_INTERVAL"; }
+        protected override string Scheduler => "SAURON_TASK_SCHEDULER_DAYS_INTERVAL";
 
         protected abstract string Source { get; }
 
         protected abstract string Collection { get; }
 
         protected RawDataScheduledTask(IConfiguration configuration, IWebCrawler<RawData> webCrawler, IRawDataRepository rawDataRepository,
-            ILogger<RawDataScheduledTask> logger) : base(configuration, logger)
+            ILogger<RawDataScheduledTask> logger, IMonitor monitor) : base(configuration, logger)
         {
-            (Configuration, _webCrawler, _rawDataRepository, _logger) = (configuration, webCrawler, rawDataRepository, logger);
+            (Configuration, _webCrawler, _rawDataRepository, _logger, _monitor) = (configuration, webCrawler, rawDataRepository, logger, monitor);
         }
 
-        public abstract Task<List<IFilter>> ExtractFiltersAsync();
-
-        protected void Stamp(string message)
-        {
-            _logger.Stamp(message);
-        }
-
-        protected void Stamp<T>(string message, T obj)
-        {
-            _logger.Stamp(message, obj);
-        }
+        protected abstract Task<List<IFilter>> ExtractFiltersAsync();
 
         public override async Task ExecuteAsync()
         {
-            await Transaction.Capture(Name, "ScheduledTask", async (currentTransaction) =>
+            await _monitor.Start(Name, "ScheduledTask", async () =>
             {
                 var filters = await ExtractFiltersAsync();
 
                 foreach (var item in filters)
-                    await ProcessFilterAsync(item, currentTransaction);
+                    await ProcessFilterAsync(item);
             });
         }
 
-        private Task ProcessFilterAsync(IFilter filter, ITransaction transaction)
+        private Task ProcessFilterAsync(IFilter filter)
         {
-            return transaction.CaptureSpan("ProcessFilterAsync", "AsyncMethod", async (span) =>
+            return _monitor.InspectMoment("ProcessFilterAsync", "AsyncMethod", async (moment) =>
             {
-                Stamp("Extracting raw data.");
+                _logger.Stamp("Extracting raw data.");
                 var rawData = await ExtractRawDataAsync(filter);
 
-                Stamp("APM logging raw data.");
-                foreach (var kv in rawData.ToDictionary())
-                    span.Context.Labels[kv.Key] = kv.Value;
+                _logger.Stamp("APM logging raw data.");
+                foreach (var (key, value) in rawData.ToDictionary())
+                    moment.AddProperty(key, value);
 
                 if (await AddRawDataIfNotExtistAsync(rawData))
                 {
-                    Stamp($"Raw data saved:", rawData);
-                    span.Context.Labels["Saved"] = "True";
+                    moment.AddProperty("Saved", "True");
+                    _logger.Stamp($"Raw data saved:", rawData);
                 }
                 else
                 {
-                    span.Context.Labels["Saved"] = "False";
-                    Stamp($"raw data already exists");
+                    moment.AddProperty("Saved", "False");
+                    _logger.Stamp($"raw data already exists");
                 }
+
+                return moment;
             });
         }
 
-        protected Task<RawData> ExtractRawDataAsync(IFilter filter)
+        private Task<RawData> ExtractRawDataAsync(IFilter filter)
         {
             return _webCrawler.ExtractAsync(Source, filter);
         }
 
-        protected Task<bool> AddRawDataIfNotExtistAsync(RawData rawData)
+        private Task<bool> AddRawDataIfNotExtistAsync(RawData rawData)
         {
             return _rawDataRepository.AddIfNotExistsAsync(Collection, rawData);
         }

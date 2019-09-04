@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sauron.Abstractions.Apm.Tracing;
 
 namespace Sauron.Runner.Tasks
 {
@@ -18,34 +19,35 @@ namespace Sauron.Runner.Tasks
         private const string SourceConfigKey = "SAURON_CRAWLER_GLOBAL_SOURCE";
         private const string CollectionConfigKey = "SAURON_MONGO_DB_DATABASE_GLOBAL_COLLECTION";
 
-        protected override string Source { get => Configuration.TryGet(SourceConfigKey); }
+        protected override string Source => Configuration.TryGet(SourceConfigKey);
 
-        protected override string Collection { get => Configuration.TryGet(CollectionConfigKey); }
+        protected override string Collection => Configuration.TryGet(CollectionConfigKey);
 
-        protected override string Name { get => "GLOBAL RAW DATA EXTRACTOR"; }
+        protected override string Name => "GLOBAL RAW DATA EXTRACTOR";
 
         public GlobalRawDataScheduledTask(IConfiguration configuration, IWebCrawler<RawData> webCrawler, IRawDataRepository rawDataRepository,
-                ILogger<RawDataScheduledTask> logger) : base(configuration, webCrawler, rawDataRepository, logger)
-        { }
+            ILogger<RawDataScheduledTask> logger, IMonitor monitor) : base(configuration, webCrawler, rawDataRepository, logger, monitor)
+        {
+        }
 
-        public override Task<List<IFilter>> ExtractFiltersAsync()
+        protected override Task<List<IFilter>> ExtractFiltersAsync()
         {
             IEnumerable<IFilter> ExtractFilter()
             {
                 var currentDate = DateTime.Now;
-                var initialYear = int.Parse(Configuration.TryGet(CrawlerInitialYearConfigKey) ?? $"{currentDate.Year}");
+                var year = int.Parse(Configuration.TryGet(CrawlerInitialYearConfigKey) ?? $"{currentDate.Year}");
 
-                while (initialYear <= currentDate.Year)
+                while (year <= currentDate.Year)
                 {
-                    for (int i = 1; i <= 12; ++i)
+                    for (var i = 1; i <= 12; ++i)
                     {
-                        if (initialYear == currentDate.Year && i > currentDate.Month)
+                        if (year == currentDate.Year && i > currentDate.Month)
                             break;
 
-                        yield return Filter.Create().AddParameter("data", $"{i.ToString().PadLeft(2, '0')}/{initialYear}");
+                        yield return Filter.Create().AddParameter("data", $"{i.ToString().PadLeft(2, '0')}/{year}");
                     }
 
-                    ++initialYear;
+                    ++year;
                 }
             }
 

@@ -30,6 +30,7 @@ namespace Sauron.Orchestrator
         {
             services.AddCrawlers(Configuration);
             services.AddRepositories();
+            services.AddApm();
 
             ConfigureServices(services);
 
