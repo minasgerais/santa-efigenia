@@ -88,27 +88,27 @@ services:
       - elasticsearch
       - elasticapm
   
-  # sauron:
-  #   image: minasgerais/sauron:canary
-  #   container_name: sta_efigenia_sauron
-  #   environment:
-  #     SAURON_UTC_HOURS_OFFSET: 0
-  #     SAURON_TASK_SCHEDULER_DAYS_INTERVAL: 1
-  #     SAURON_CRAWLER_BASE_URL: https://www.cmbh.mg.gov.br/sites/all/modules/execucao_orcamentaria_custeio
-  #     SAURON_CRAWLER_INITIAL_YEAR: 2016
-  #     SAURON_CRAWLER_GLOBAL_SOURCE: pesquisar.php
-  #     SAURON_CRAWLER_DETAIL_SOURCE: detalhar.php
-  #     SAURON_MONGO_DB_USERNAME: root
-  #     SAURON_MONGO_DB_PASSWORD: root
-  #     SAURON_MONGO_DB_CONTCPIP: sta_efigenia_mongo
-  #     SAURON_MONGO_DB_CONNPORT: 27017
-  #     SAURON_MONGO_DB_DATABASE: sauron
-  #     SAURON_MONGO_DB_DATABASE_GLOBAL_COLLECTION: global
-  #     SAURON_MONGO_DB_DATABASE_DETAIL_COLLECTION: detail
-  #   links:
-  #     - mongo
-  #   networks: 
-  #     - sta_efigenia_network
+  sauron:
+    image: minasgerais/sauron:canary
+    container_name: sta_efigenia_sauron
+    environment:
+      SAURON_UTC_HOURS_OFFSET: 0
+      SAURON_TASK_SCHEDULER_DAYS_INTERVAL: 1
+      SAURON_CRAWLER_BASE_URL: https://www.cmbh.mg.gov.br/sites/all/modules/execucao_orcamentaria_custeio
+      SAURON_CRAWLER_INITIAL_YEAR: 2016
+      SAURON_CRAWLER_GLOBAL_SOURCE: pesquisar.php
+      SAURON_CRAWLER_DETAIL_SOURCE: detalhar.php
+      SAURON_MONGO_DB_USERNAME: root
+      SAURON_MONGO_DB_PASSWORD: root
+      SAURON_MONGO_DB_CONTCPIP: sta_efigenia_mongo
+      SAURON_MONGO_DB_CONNPORT: 27017
+      SAURON_MONGO_DB_DATABASE: sauron
+      SAURON_MONGO_DB_DATABASE_GLOBAL_COLLECTION: global
+      SAURON_MONGO_DB_DATABASE_DETAIL_COLLECTION: detail
+    links:
+      - mongo
+    networks: 
+      - sta_efigenia_network
 
 volumes:
   sta_efigenia_mongo_vl:
@@ -120,6 +120,7 @@ volumes:
   sta_efigenia_elasticsearch_vl:
     driver: local
 
+  # Production
   # sta_efigenia_mongo_vl:
   #   driver: local
   #   driver_opts:
