@@ -105,7 +105,7 @@ services:
       SAURON_MONGO_DB_DATABASE: sauron
       SAURON_MONGO_DB_DATABASE_GLOBAL_COLLECTION: global
       SAURON_MONGO_DB_DATABASE_DETAIL_COLLECTION: detail
-      ElasticApm__ServerUrls: http://sta_efigenia_elasticapm:8086
+      ElasticApm__ServerUrls: http://sta_efigenia_elasticapm:8200
       ElasticApm__ServiceName: Sauron.Canary
     links:
       - mongo
