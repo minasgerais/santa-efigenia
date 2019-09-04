@@ -35,7 +35,7 @@ namespace Samwise.Services
 
         public async Task ExecuteParseAsync()
         {
-            var listRawData = await _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionNameSauron);
+            var listRawData = await _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionNameSauron, lnq => lnq.Parsed == default);
             foreach (var rawDataDetail in listRawData)
             {
                 var camaraMunicipalCusteioParlamentarResult = ExtractCamaraMunicipalCusteioParlamentar(rawDataDetail);
