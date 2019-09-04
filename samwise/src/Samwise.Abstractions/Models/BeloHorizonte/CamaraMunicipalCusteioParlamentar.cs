@@ -7,20 +7,20 @@ namespace Samwise.Abstractions.Models.BeloHorizonte
     {
         public CamaraMunicipalCusteioParlamentar()
         {
-            CamaraMunicipalCusteioParlamentarExpenseses = new List<CamaraMunicipalCusteioParlamentarExpenses>();
+            Expenses = new List<CamaraMunicipalCusteioParlamentarExpenses>();
         }
         
-        public string IdDocumentExtracted { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public DateTimeOffset ExtractionDate { get; set; }
         
         public DateTimeOffset? Parsed { get; set; }
         
-        public IEnumerable<CamaraMunicipalCusteioParlamentarExpenses> CamaraMunicipalCusteioParlamentarExpenseses { get; set; }
+        public IEnumerable<CamaraMunicipalCusteioParlamentarExpenses> Expenses { get; set; }
 
         public CamaraMunicipalCusteioParlamentar SetIdDocumentExtracted(string idDocument)
         {
-            IdDocumentExtracted = idDocument;
+            Id = idDocument;
             return this;
         }
 

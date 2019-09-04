@@ -21,10 +21,10 @@ namespace Samwise.Base.Fixtures.Parsers
             var expectedResult = new CamaraMunicipalCusteioParlamentar
             {
                 Name = amountElements == default ? default : _nameFake,
-                CamaraMunicipalCusteioParlamentarExpenseses = GenerateCamaraMunicipalCusteioParlamentarExpenses(amountElements)
+                Expenses = GenerateCamaraMunicipalCusteioParlamentarExpenses(amountElements)
             };
 
-            return (expectedResult, GenerateTable(expectedResult.CamaraMunicipalCusteioParlamentarExpenseses));
+            return (expectedResult, GenerateTable(expectedResult.Expenses));
         }
 
         private IEnumerable<CamaraMunicipalCusteioParlamentarExpenses> GenerateCamaraMunicipalCusteioParlamentarExpenses(int amountElements)

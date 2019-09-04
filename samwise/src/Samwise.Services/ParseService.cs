@@ -35,12 +35,12 @@ namespace Samwise.Services
 
         public async Task ExecuteParseAsync()
         {
-            var listRawData = await _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionNameSauron, lnq => lnq.Parsed == default);
+            var listRawData = await _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionNameSauron);
             foreach (var rawDataDetail in listRawData)
             {
                 var camaraMunicipalCusteioParlamentarResult = ExtractCamaraMunicipalCusteioParlamentar(rawDataDetail);
                 
-                await SaveCamaraMunicipalCusteioParlamentar(camaraMunicipalCusteioParlamentarResult);
+                await SaveOrUpdateCamaraMunicipalCusteioParlamentar(camaraMunicipalCusteioParlamentarResult);
                 await UpdateRawData(camaraMunicipalCusteioParlamentarResult, rawDataDetail);
             }
         }
@@ -54,9 +54,9 @@ namespace Samwise.Services
                 .SetExtrationDateWithDateNow();
         }
 
-        private Task SaveCamaraMunicipalCusteioParlamentar(CamaraMunicipalCusteioParlamentar camaraMunicipalCusteioParlamentar)
+        private Task SaveOrUpdateCamaraMunicipalCusteioParlamentar(CamaraMunicipalCusteioParlamentar camaraMunicipalCusteioParlamentar)
         {
-            return _samwiseDataRepository.SaveAsync(_databaseCollectionNameSamwise, camaraMunicipalCusteioParlamentar);
+            return _samwiseDataRepository.SaveOrUpdateAsync(_databaseCollectionNameSamwise, camaraMunicipalCusteioParlamentar, lnq => lnq.Id == camaraMunicipalCusteioParlamentar.Id);
         }
 
         private Task UpdateRawData(CamaraMunicipalCusteioParlamentar camaraMunicipalCusteioParlamentar, RawData rawData)

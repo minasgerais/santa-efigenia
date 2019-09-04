@@ -41,14 +41,14 @@ namespace Samwise.Repositories.MongoDB
 
         public Task<TData> GetAsync<TData>(string collectionName, Expression<Func<TData, bool>> expression)
         {
-            return GetCollection<TData>(collectionName).Find(expression).FirstOrDefaultAsync();
+            return GetCollection<TData>(collectionName).Find(expression).SingleOrDefaultAsync();
         }
 
         public Task SaveOrUpdateAsync<TData>(string collectionName, TData rawData, Expression<Func<TData, bool>> expression)
         {
             return GetAsync(collectionName, expression)
                 .ContinueWith(
-                    (getAsync) => getAsync.Result == null
+                    (task) => task.GetAwaiter().GetResult() == null
                         ? SaveAsync(collectionName, rawData)
                         : UpdateAsync(collectionName, rawData, expression)
                 );

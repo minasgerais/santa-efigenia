@@ -23,7 +23,7 @@ namespace Samwise.Parsers.BeloHorizonte
                 {
                     Name = nodes.First().SelectSingleNode(string.Format(DataTileSelector, DataTitleDespesa)).InnerText
                         .Trim(),
-                    CamaraMunicipalCusteioParlamentarExpenseses = nodes.Select(lnq =>
+                    Expenses = nodes.Select(lnq =>
                         new CamaraMunicipalCusteioParlamentarExpenses
                         {
                             DetailExpanse = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTitleDetalhamento))
