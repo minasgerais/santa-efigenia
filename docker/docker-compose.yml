@@ -3,7 +3,7 @@ version: '3'
 services:
 
   mongo:
-    image: mongo
+    image: mongo:4.2.0
     container_name: sta_efigenia_mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -16,7 +16,7 @@ services:
       - sta_efigenia_network
 
   mongo-express:
-    image: mongo-express
+    image: mongo-express:0.49.0
     container_name: sta_efigenia_mongo_express
     ports:
       - 8081:8081
@@ -114,7 +114,7 @@ services:
       - sta_efigenia_network
     depends_on:
       - mongo
-      - elasticapm      
+      - elasticapm
 
 volumes:
   sta_efigenia_mongo_vl:
