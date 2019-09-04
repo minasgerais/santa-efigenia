@@ -105,10 +105,16 @@ services:
       SAURON_MONGO_DB_DATABASE: sauron
       SAURON_MONGO_DB_DATABASE_GLOBAL_COLLECTION: global
       SAURON_MONGO_DB_DATABASE_DETAIL_COLLECTION: detail
+      ElasticApm__ServerUrls: http://sta_efigenia_elasticapm:8086
+      ElasticApm__ServiceName: Sauron.Canary
     links:
       - mongo
+      - elasticapm
     networks: 
       - sta_efigenia_network
+    depends_on:
+      - mongo
+      - elasticapm      
 
 volumes:
   sta_efigenia_mongo_vl:
@@ -120,27 +126,27 @@ volumes:
   sta_efigenia_elasticsearch_vl:
     driver: local
 
-  # Production
-  # sta_efigenia_mongo_vl:
-  #   driver: local
-  #   driver_opts:
-  #     type: none
-  #     device: /d/home/volumes/mongodb/data/db
-  #     o: bind
+# Production
+#   sta_efigenia_mongo_vl:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /home/volumes/mongodb/data/db
+#       o: bind
 
-  # sta_efigenia_rabbitmq_vl: 
-  #   driver: local
-  #   driver_opts:
-  #     type: none
-  #     device: /d/home/volumes/rabbitmq/var/lib
-  #     o: bind
+#   sta_efigenia_rabbitmq_vl: 
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /home/volumes/rabbitmq/var/lib
+#       o: bind
 
-  # sta_efigenia_elasticsearch_node1_vl:
-  #   driver: local
-  #   driver_opts:
-  #     type: none
-  #     device: /d/home/volumes/elasticsearch/node1/data
-  #     o: bind  
+#   sta_efigenia_elasticsearch_node1_vl:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /home/volumes/elastic/search/node1/data
+#       o: bind  
 
 networks: 
     sta_efigenia_network:
