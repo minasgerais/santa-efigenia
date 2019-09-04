@@ -12,12 +12,13 @@ namespace Sauron.Runner
     {
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
             : base(configuration, hostingEnvironment)
-        { }
+        {
+        }
 
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddScheduledTask<GlobalRawDataScheduledTask>();
-            services.AddScheduledTask<DetailRawDataScheduledTask>();
+            //services.AddScheduledTask<DetailRawDataScheduledTask>();
         }
 
         public override void Configure(IApplicationBuilder app)
@@ -25,10 +26,7 @@ namespace Sauron.Runner
             if (HostingEnvironment.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.Run(async (context) => { await context.Response.WriteAsync("I am Sauron, I see everything!"); });
         }
     }
 }

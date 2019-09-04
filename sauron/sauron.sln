@@ -23,6 +23,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sauron.Scheduling", "src\Sa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "architecture", "architecture", "{855B8B30-E5DF-4970-B685-F0F760A63A95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sauron.Apm", "src\Sauron.Apm\Sauron.Apm.csproj", "{3968FD24-F8B5-4D1F-B760-195F39065730}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{5ADA31EE-25BD-4FCC-83EB-7FA2D56B8B57}"
+ProjectSection(SolutionItems) = preProject
+	Dockerfile = Dockerfile
+	build = build
+	README.md = README.md
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +66,10 @@ Global
 		{4912884E-1D74-46CD-852D-001F88A42DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4912884E-1D74-46CD-852D-001F88A42DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4912884E-1D74-46CD-852D-001F88A42DA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3968FD24-F8B5-4D1F-B760-195F39065730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3968FD24-F8B5-4D1F-B760-195F39065730}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3968FD24-F8B5-4D1F-B760-195F39065730}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3968FD24-F8B5-4D1F-B760-195F39065730}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +83,7 @@ Global
 		{4BC64D3A-9FFD-4DF6-913C-55EFCEB802A4} = {855B8B30-E5DF-4970-B685-F0F760A63A95}
 		{4912884E-1D74-46CD-852D-001F88A42DA2} = {855B8B30-E5DF-4970-B685-F0F760A63A95}
 		{855B8B30-E5DF-4970-B685-F0F760A63A95} = {83C82506-3519-426A-99C3-482CA76DADA9}
+		{3968FD24-F8B5-4D1F-B760-195F39065730} = {855B8B30-E5DF-4970-B685-F0F760A63A95}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CE90278C-4640-42F2-A0AF-33E930C359C0}

@@ -9,6 +9,7 @@ using Sauron.Crawlers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sauron.Abstractions.Apm.Tracing;
 
 namespace Sauron.Runner.Tasks
 {
@@ -18,17 +19,18 @@ namespace Sauron.Runner.Tasks
         private const string GlobalCollectionConfigKey = "SAURON_MONGO_DB_DATABASE_GLOBAL_COLLECTION";
         private const string CollectionConfigKey = "SAURON_MONGO_DB_DATABASE_DETAIL_COLLECTION";
 
-        protected override string Source { get => Configuration.TryGet(SourceConfigKey); }
+        protected override string Source => Configuration.TryGet(SourceConfigKey);
 
-        protected override string Collection { get => Configuration.TryGet(CollectionConfigKey); }
+        protected override string Collection => Configuration.TryGet(CollectionConfigKey);
 
-        protected override string Name { get => "DETAILED RAW DATA EXTRACTOR"; }
+        protected override string Name => "DETAILED RAW DATA EXTRACTOR";
 
         public DetailRawDataScheduledTask(IConfiguration configuration, IWebCrawler<RawData> webCrawler, IRawDataRepository rawDataRepository,
-            ILogger<RawDataScheduledTask> logger) : base(configuration, webCrawler, rawDataRepository, logger)
-        { }
+            ILogger<RawDataScheduledTask> logger, IMonitor monitor) : base(configuration, webCrawler, rawDataRepository, logger, monitor)
+        {
+        }
 
-        public override async Task<List<IFilter>> ExtractFiltersAsync()
+        protected override async Task<List<IFilter>> ExtractFiltersAsync()
         {
             var result = new List<IFilter>();
 
@@ -42,19 +44,19 @@ namespace Sauron.Runner.Tasks
                 var nodes = htmlDoc.DocumentNode
                     .SelectNodes("//table/tbody/tr/td[@data-title='Detalhamento']/a");
 
-                if (nodes != default)
-                {
-                    var hashTable = nodes
-                        .Select(node => node.Attributes["data-codvereador"]?.Value)
-                        .ToList();
+                if (nodes == default) continue;
 
-                    foreach (var hash in hashTable)
-                        result.Add(
-                                Filter.Create()
-                                    .AddParameter("data", data.Filter.Split('=').GetValue(1)) // TODO: remover o split por um regex.
-                                    .AddParameter("codVereador", hash)
-                            );
-                }
+                var hashTable = nodes
+                    .Select(node => node.Attributes["data-codvereador"]?.Value)
+                    .ToList();
+
+                result.AddRange(
+                    hashTable.Select(
+                        hash => Filter.Create()
+                            .AddParameter("data", data.Filter.Split('=').GetValue(1)) // TODO: remover o split por um regex.
+                            .AddParameter("codVereador", hash)
+                    )
+                );
             }
 
             return result;
@@ -63,8 +65,8 @@ namespace Sauron.Runner.Tasks
         protected override Task<List<RawData>> GetAllRawDataAsync()
         {
             return GetAllRawDataFromAnotherCollectionAsync(
-                    Configuration.TryGet(GlobalCollectionConfigKey)
-                );
+                Configuration.TryGet(GlobalCollectionConfigKey)
+            );
         }
     }
 }

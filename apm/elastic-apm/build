@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ -z $1 ] 
+  then
+    printf "Could not find a tagname.\r\nUsage: build [tagname]\n\tWhere tagname is '1.0' or '1.0-semantic' whatever (without quotes)."
+    exit 1
+fi
+
+echo "Building docker image with tag: $1"
+docker build -t minasgerais/elastic-apm-server:$1 .
+
+echo "Pushing image with tag: $1 to docker hub"
+docker tag minasgerais/elastic-apm-server:$1 minasgerais/elastic-apm-server:$1
+docker push minasgerais/elastic-apm-server:$1
+
+echo "Build finished"
+
+exit 0
