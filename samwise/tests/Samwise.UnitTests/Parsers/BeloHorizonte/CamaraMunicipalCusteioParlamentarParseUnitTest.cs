@@ -11,7 +11,7 @@ namespace Samwise.UnitTests.Parsers.BeloHorizonte
 {
     public class CamaraMunicipalCusteioParlamentarParseUnitTest: IClassFixture<CamaraMunicipalCusteioParlamentarParseFixture>
     {
-        private readonly IParseData<HtmlDocument, IEnumerable<CamaraMunicipalCusteioParlamentar>> _parseData;
+        private readonly IParseData<HtmlDocument, CamaraMunicipalCusteioParlamentar> _parseData;
         private readonly CamaraMunicipalCusteioParlamentarParseFixture _fixture;
         
         public CamaraMunicipalCusteioParlamentarParseUnitTest(CamaraMunicipalCusteioParlamentarParseFixture fixture)

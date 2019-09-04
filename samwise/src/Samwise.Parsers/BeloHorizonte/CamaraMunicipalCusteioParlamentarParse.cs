@@ -6,7 +6,7 @@ using Samwise.Abstractions.Parsers;
 
 namespace Samwise.Parsers.BeloHorizonte
 {
-    public class CamaraMunicipalCusteioParlamentarParse : IParseData<HtmlDocument, IEnumerable<CamaraMunicipalCusteioParlamentar>>
+    public class CamaraMunicipalCusteioParlamentarParse : IParseData<HtmlDocument, CamaraMunicipalCusteioParlamentar>
     {
         private const string DataTitleDespesa = "Despesa";
         private const string DataTitleDetalhamento = "Detalhamento";
@@ -14,16 +14,25 @@ namespace Samwise.Parsers.BeloHorizonte
         private const string TabelaSelectorRoot = @"//table[@id='a']/tbody/tr/td[contains(@data-title, 'Despesa')]/..";
         private const string DataTileSelector = @".//td[@data-title='{0}']";
 
-        public IEnumerable<CamaraMunicipalCusteioParlamentar> ParseData(HtmlDocument data)
+        public CamaraMunicipalCusteioParlamentar ParseData(HtmlDocument data)
         {
-            return data.DocumentNode.SelectNodes(TabelaSelectorRoot)
-                ?.Where(lnq => lnq.NodeType != HtmlNodeType.Text)
-                .Select(lnq => new CamaraMunicipalCusteioParlamentar
+            var nodes = data.DocumentNode.SelectNodes(TabelaSelectorRoot)
+                ?.Where(lnq => lnq.NodeType != HtmlNodeType.Text);
+            return nodes != default
+                ? new CamaraMunicipalCusteioParlamentar
                 {
-                    Name = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTitleDespesa)).InnerText.Trim(),
-                    DetailExpanse = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTitleDetalhamento)).InnerText.Trim(),
-                    Value = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTileValor)).InnerText.Trim()
-                }) ?? new List<CamaraMunicipalCusteioParlamentar>();
+                    Name = nodes.First().SelectSingleNode(string.Format(DataTileSelector, DataTitleDespesa)).InnerText
+                        .Trim(),
+                    CamaraMunicipalCusteioParlamentarExpenseses = nodes.Select(lnq =>
+                        new CamaraMunicipalCusteioParlamentarExpenses
+                        {
+                            DetailExpanse = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTitleDetalhamento))
+                                .InnerText.Trim(),
+                            Value = lnq.SelectSingleNode(string.Format(DataTileSelector, DataTileValor)).InnerText
+                                .Trim()
+                        })
+                }
+                : new CamaraMunicipalCusteioParlamentar();
         }
     }
 }

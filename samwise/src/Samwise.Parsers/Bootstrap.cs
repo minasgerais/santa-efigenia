@@ -12,7 +12,7 @@ namespace Samwise.Parsers
     {
         public static IServiceCollection AddParsers(this IServiceCollection services)
         {
-            services.TryAddScoped<IParseData<HtmlDocument, IEnumerable<CamaraMunicipalCusteioParlamentar>>, CamaraMunicipalCusteioParlamentarParse>();
+            services.TryAddScoped<IParseData<HtmlDocument, CamaraMunicipalCusteioParlamentar>, CamaraMunicipalCusteioParlamentarParse>();
             
             return services;
         }

@@ -7,31 +7,43 @@ using Samwise.Base.Extensions;
 
 namespace Samwise.Base.Fixtures.Parsers
 {
-    public class CamaraMunicipalCusteioParlamentarParseFixture: BaseFixture
+    public class CamaraMunicipalCusteioParlamentarParseFixture : BaseFixture
     {
+        private string _nameFake;
+
         private readonly Faker _faker = BogusExtensions.FakerPtBr;
 
         private const string ExpenseDetailing = "Detalhamento despesa FAKE";
-        
-        public (IEnumerable<CamaraMunicipalCusteioParlamentar> expectedResult, string htmlTabelaFake) GenerateFakeData(int amountElements)
+
+        public (CamaraMunicipalCusteioParlamentar expectedResult, string htmlTabelaFake) GenerateFakeData(int amountElements)
         {
-            var name = _faker.Name.FullName();
-            var expectedResult = new List<CamaraMunicipalCusteioParlamentar>();
+            _nameFake = _faker.Name.FullName();
+            var expectedResult = new CamaraMunicipalCusteioParlamentar
+            {
+                Name = amountElements == default ? default : _nameFake,
+                CamaraMunicipalCusteioParlamentarExpenseses = GenerateCamaraMunicipalCusteioParlamentarExpenses(amountElements)
+            };
+
+            return (expectedResult, GenerateTable(expectedResult.CamaraMunicipalCusteioParlamentarExpenseses));
+        }
+
+        private IEnumerable<CamaraMunicipalCusteioParlamentarExpenses> GenerateCamaraMunicipalCusteioParlamentarExpenses(int amountElements)
+        {
+            var result = new List<CamaraMunicipalCusteioParlamentarExpenses>();
             for (var i = 0; i < amountElements; i++)
             {
-                expectedResult.Add(new CamaraMunicipalCusteioParlamentar
+                result.Add(new CamaraMunicipalCusteioParlamentarExpenses
                 {
-                    Name = name,
                     DetailExpanse = ExpenseDetailing,
                     Value = $"R${_faker.Finance.Amount()}"
                 });
             }
 
-            return (expectedResult, GenerateTable(expectedResult));
+            return result;
         }
 
 
-        private string GenerateTable(IEnumerable<CamaraMunicipalCusteioParlamentar> fakeElements)
+        private string GenerateTable(IEnumerable<CamaraMunicipalCusteioParlamentarExpenses> fakeElements)
         {
             return $@"
                 <h2>Resultados da pesquisa</h2>
@@ -55,20 +67,19 @@ namespace Samwise.Base.Fixtures.Parsers
             ";
         }
 
-        private string GenerateTrs(IEnumerable<CamaraMunicipalCusteioParlamentar> fakeElements)
+        private string GenerateTrs(IEnumerable<CamaraMunicipalCusteioParlamentarExpenses> fakeElements)
         {
             var trs = new StringBuilder();
             var totalValue = 0m;
-            
-            
+
 
             foreach (var item in fakeElements)
             {
                 totalValue += Convert.ToDecimal(item.Value.Replace("R$", ""));
-                    
+
                 trs.AppendLine($@"
                     <tr class=""success"">
-                        <td data-title=""Despesa"" class=""td_pad"">{item.Name}</td>
+                        <td data-title=""Despesa"" class=""td_pad"">{_nameFake}</td>
                         <td data-title=""Detalhamento"" class=""td_pad"">{ExpenseDetailing}</td>
                         <td data-title=""Valor"" class=""td_pad"">{item.Value}</td>
                     </tr>

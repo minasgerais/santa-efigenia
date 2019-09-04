@@ -11,7 +11,7 @@ namespace Samwise.Services
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.TryAddScoped<IParseService, ParseService<HtmlDocument, IEnumerable<CamaraMunicipalCusteioParlamentar>>>();
+            services.TryAddScoped<IParseService<HtmlDocument, CamaraMunicipalCusteioParlamentar>, ParseService>();
             
             return services;
         }

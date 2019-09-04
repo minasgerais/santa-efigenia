@@ -10,5 +10,12 @@ namespace Samwise.Abstractions.Models
         public DateTimeOffset Visited { get; set; }
         public DateTimeOffset? Parsed { get; set; }
         public string RawContent { get; set; }
+
+        public RawData SetDateParsed(DateTimeOffset dateTimeOffset)
+        {
+            Parsed = dateTimeOffset;
+            return this;
+        }
+
     }
 }
