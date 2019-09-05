@@ -10,13 +10,13 @@ namespace Sauron.Repositories.MongoDB
 {
     public class RawDataRepository : IRawDataRepository
     {
-        private const string mongoAuthMech = "SCRAM-SHA-1";
-        private const string MongoAdminDbN = "admin";
-        private const string MongoUsername = "SAURON_MONGO_DB_USERNAME";
-        private const string MongoPassword = "SAURON_MONGO_DB_PASSWORD";
-        private const string MongoDatabase = "SAURON_MONGO_DB_DATABASE";
-        private const string MongoConTcpIp = "SAURON_MONGO_DB_CONTCPIP";
-        private const string MongoConnPort = "SAURON_MONGO_DB_CONNPORT";
+        private const string AuthMech = "SCRAM-SHA-1";
+        private const string AdminDbN = "admin";
+        private const string Username = "SAURON_MONGO_DB_USERNAME";
+        private const string Password = "SAURON_MONGO_DB_PASSWORD";
+        private const string Database = "SAURON_MONGO_DB_DATABASE";
+        private const string ConTcpIp = "SAURON_MONGO_DB_CONTCPIP";
+        private const string ConnPort = "SAURON_MONGO_DB_CONNPORT";
 
         private readonly IMongoDatabase _mongoDatabase;
 
@@ -25,16 +25,16 @@ namespace Sauron.Repositories.MongoDB
             var settings = new MongoClientSettings
             {
                 Credential = new MongoCredential(
-                    mongoAuthMech,
-                    new MongoInternalIdentity(MongoAdminDbN, configuration.TryGet(MongoUsername)),
-                    new PasswordEvidence(configuration.TryGet(MongoPassword))
+                    AuthMech,
+                    new MongoInternalIdentity(AdminDbN, configuration.TryGet(Username)),
+                    new PasswordEvidence(configuration.TryGet(Password))
                 ),
-                Server = new MongoServerAddress(configuration.TryGet(MongoConTcpIp), configuration.TryGet<int>(MongoConnPort))
+                Server = new MongoServerAddress(configuration.TryGet(ConTcpIp), configuration.TryGet<int>(ConnPort))
             };
 
             var mongoClient = new MongoClient(settings);
 
-            _mongoDatabase = mongoClient.GetDatabase(configuration.TryGet(MongoDatabase));
+            _mongoDatabase = mongoClient.GetDatabase(configuration.TryGet(Database));
         }
 
         public Task<bool> AddAsync(string collectionName, RawData rawData)

@@ -3,7 +3,7 @@ version: '3'
 services:
 
   mongo:
-    image: mongo
+    image: mongo:4.2.0
     container_name: sta_efigenia_mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -11,12 +11,12 @@ services:
     ports:
       - 8082:27017
     volumes:
-      - /home/volumes/mongodb/data/db:/data/db
+      - sta_efigenia_mongo_vl:/data/db
     networks: 
       - sta_efigenia_network
 
   mongo-express:
-    image: mongo-express
+    image: mongo-express:0.49.0
     container_name: sta_efigenia_mongo_express
     ports:
       - 8081:8081
@@ -41,9 +41,52 @@ services:
       - 8083:5672
       - 8084:15672
     volumes:
-      - /home/volumes/rabbitmq/var/lib:/var/lib/rabbitmq
+      - sta_efigenia_rabbitmq_vl:/var/lib/rabbitmq
     networks: 
       - sta_efigenia_network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+    container_name: sta_efigenia_elasticsearch
+    environment:
+      - discovery.type=single-node
+      - cluster.name=sta-efigenia-elasticsearch-cluster
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 8085:9200
+    volumes:
+      - sta_efigenia_elasticsearch_vl:/usr/share/elasticsearch/data
+    networks:
+      - sta_efigenia_network
+
+  elasticapm:
+    image: minasgerais/elastic-apm-server:canary
+    container_name: sta_efigenia_elasticapm
+    links:
+      - elasticsearch
+    ports:
+      - 8086:8200
+    networks:
+      - sta_efigenia_network
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.3.1
+    container_name: sta_efigenia_kibana
+    links:
+      - elasticsearch
+      - elasticapm
+    ports:
+      - 8087:5601
+    networks:
+      - sta_efigenia_network
+    depends_on:
+      - elasticsearch
+      - elasticapm
   
   sauron:
     image: minasgerais/sauron:canary
@@ -62,10 +105,48 @@ services:
       SAURON_MONGO_DB_DATABASE: sauron
       SAURON_MONGO_DB_DATABASE_GLOBAL_COLLECTION: global
       SAURON_MONGO_DB_DATABASE_DETAIL_COLLECTION: detail
+      ElasticApm__ServerUrls: http://sta_efigenia_elasticapm:8200
+      ElasticApm__ServiceName: Sauron.Canary
     links:
       - mongo
+      - elasticapm
     networks: 
       - sta_efigenia_network
+    depends_on:
+      - mongo
+      - elasticapm
+
+volumes:
+  sta_efigenia_mongo_vl:
+    driver: local
+
+  sta_efigenia_rabbitmq_vl:
+    driver: local
+  
+  sta_efigenia_elasticsearch_vl:
+    driver: local
+
+# Production
+#   sta_efigenia_mongo_vl:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /home/volumes/mongodb/data/db
+#       o: bind
+
+#   sta_efigenia_rabbitmq_vl: 
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /home/volumes/rabbitmq/var/lib
+#       o: bind
+
+#   sta_efigenia_elasticsearch_node1_vl:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /home/volumes/elastic/search/node1/data
+#       o: bind  
 
 networks: 
     sta_efigenia_network:

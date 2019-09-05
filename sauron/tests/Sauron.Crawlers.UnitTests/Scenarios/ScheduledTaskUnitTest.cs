@@ -20,18 +20,20 @@ namespace Sauron.Crawlers.UnitTests.Scenarios
             var configuration = rawDataFixture.Configuration;
 
             GlobalRawDataScheduledTask = new GlobalRawDataScheduledTask(
-                    rawDataFixture.Configuration,
-                    rawDataFixture.CreateGlobalWebCrawler(10),
-                    rawDataFixture.MockGlobalRawDataRepository(10, 10, configuration.TryGet(GlobalSource), Filter.Create().AddParameter("data", "07/19")),
-                    rawDataFixture.GetLogger<RawDataScheduledTask>()
-                );
+                rawDataFixture.Configuration,
+                rawDataFixture.CreateGlobalWebCrawler(10),
+                rawDataFixture.MockGlobalRawDataRepository(10, 10, configuration.TryGet(GlobalSource), Filter.Create().AddParameter("data", "07/19")),
+                rawDataFixture.GetLogger<RawDataScheduledTask>(),
+                rawDataFixture.GetMonitor()
+            );
 
             DetailRawDataScheduledTask = new DetailRawDataScheduledTask(
-                    rawDataFixture.Configuration,
-                    rawDataFixture.CreateDetailWebCrawler(10),
-                    rawDataFixture.MockGlobalRawDataRepository(10, 10, configuration.TryGet(GlobalSource), Filter.Create().AddParameter("data", "07/19")),
-                    rawDataFixture.GetLogger<RawDataScheduledTask>()
-                );
+                rawDataFixture.Configuration,
+                rawDataFixture.CreateDetailWebCrawler(10),
+                rawDataFixture.MockGlobalRawDataRepository(10, 10, configuration.TryGet(GlobalSource), Filter.Create().AddParameter("data", "07/19")),
+                rawDataFixture.GetLogger<RawDataScheduledTask>(),
+                rawDataFixture.GetMonitor()
+            );
         }
 
         [Fact]

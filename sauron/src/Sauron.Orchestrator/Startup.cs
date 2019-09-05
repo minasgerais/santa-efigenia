@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sauron.Abstractions;
+using Sauron.Apm;
 using Sauron.Crawlers;
 using Sauron.Repositories.MongoDB;
 using Sauron.Scheduling;
@@ -29,6 +30,7 @@ namespace Sauron.Orchestrator
         {
             services.AddCrawlers(Configuration);
             services.AddRepositories();
+            services.AddApm();
 
             ConfigureServices(services);
 
@@ -37,6 +39,8 @@ namespace Sauron.Orchestrator
 
         void IStartup.Configure(IApplicationBuilder app)
         {
+            app.UseApm(Configuration);
+
             Configure(app);
 
             app.UseScheduledTask();
