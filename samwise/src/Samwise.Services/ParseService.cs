@@ -39,7 +39,7 @@ namespace Samwise.Services
             foreach (var rawDataDetail in listRawData)
             {
                 var camaraMunicipalCusteioParlamentarResult = ExtractCamaraMunicipalCusteioParlamentar(rawDataDetail);
-                
+
                 await SaveOrUpdateCamaraMunicipalCusteioParlamentar(camaraMunicipalCusteioParlamentarResult);
                 await UpdateRawData(camaraMunicipalCusteioParlamentarResult, rawDataDetail);
             }
@@ -51,7 +51,8 @@ namespace Samwise.Services
             htmlDocument.LoadHtml(rawData.RawContent);
             return _parseData.ParseData(htmlDocument)
                 .SetIdDocumentExtracted(rawData.Id)
-                .SetExtrationDateWithDateNow();
+                .SetExtrationDateWithDateNow()
+                .SetIdParliamentary(rawData.Filter);
         }
 
         private Task SaveOrUpdateCamaraMunicipalCusteioParlamentar(CamaraMunicipalCusteioParlamentar camaraMunicipalCusteioParlamentar)

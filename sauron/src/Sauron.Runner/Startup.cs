@@ -18,7 +18,7 @@ namespace Sauron.Runner
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddScheduledTask<GlobalRawDataScheduledTask>();
-            //services.AddScheduledTask<DetailRawDataScheduledTask>();
+            services.AddScheduledTask<DetailRawDataScheduledTask>();
         }
 
         public override void Configure(IApplicationBuilder app)
