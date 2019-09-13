@@ -49,11 +49,18 @@ namespace Samwise.Services
         {
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(rawData.RawContent);
-            return _parseData.ParseData(htmlDocument)
-                .SetIdDocumentExtracted(rawData.Id)
-                .SetDateExtractedWithDateNow()
-                .SetIdParliamentaryExtracted(rawData.Filter);
+            var camaraMunicipalCusteioParlamentarExtracted = _parseData.ParseData(htmlDocument);
+
+            return LoadCamaraMunicipalCusteioParlamentar(camaraMunicipalCusteioParlamentarExtracted, rawData.Id, rawData.Filter);
         }
+
+        private CamaraMunicipalCusteioParlamentar LoadCamaraMunicipalCusteioParlamentar(CamaraMunicipalCusteioParlamentar camaraMunicipalCusteioParlamentar,
+            string id, string filter) =>
+            camaraMunicipalCusteioParlamentar
+                .SetIdDocumentExtracted(id)
+                .SetDateExtractedWithDateNow()
+                .SetIdParliamentaryExtracted(filter);
+
 
         private Task SaveOrUpdateCamaraMunicipalCusteioParlamentar(CamaraMunicipalCusteioParlamentar camaraMunicipalCusteioParlamentar)
         {
@@ -62,8 +69,13 @@ namespace Samwise.Services
 
         private Task UpdateRawData(CamaraMunicipalCusteioParlamentar camaraMunicipalCusteioParlamentar, RawData rawData)
         {
-            rawData.SetDateParsed(camaraMunicipalCusteioParlamentar.ExtractionDate);
-            return _sauronDataRepository.UpdateAsync(_databaseCollectionNameSauron, rawData, lnq => lnq.Id == rawData.Id);
+            UpdateModelRawData(rawData, camaraMunicipalCusteioParlamentar);
+            return SaveRawData(rawData);
         }
+
+        private void UpdateModelRawData(RawData rawData, CamaraMunicipalCusteioParlamentar camaraMunicipalCusteioParlamentar)
+            => rawData.SetDateParsed(camaraMunicipalCusteioParlamentar.ExtractionDate);
+
+        private Task SaveRawData(RawData rawData) => _sauronDataRepository.UpdateAsync(_databaseCollectionNameSauron, rawData, lnq => lnq.Id == rawData.Id);
     }
 }
