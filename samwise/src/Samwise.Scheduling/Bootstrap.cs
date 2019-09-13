@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Samwise.Scheduling.Tasks;
 
+// TODO Vericiar possibilidade de criar estrura de agendamento no MorganFreeman para todos os projetos
 namespace Samwise.Scheduling
 {
     public static class Bootstrap

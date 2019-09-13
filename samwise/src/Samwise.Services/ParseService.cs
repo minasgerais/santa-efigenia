@@ -14,7 +14,7 @@ namespace Samwise.Services
 {
     public class ParseService : IParseService<HtmlDocument, CamaraMunicipalCusteioParlamentar>
     {
-        private const string ConfigurationDatabaseCollectionSamwise = "SAMWISE_MONGO_DB_DATABASE_COLLECTION";
+        private const string ConfigurationDatabaseCollectionSamwise = "SAMWISE_MONGO_DB_DATABASE_COLLECTION_CUSTEIO_PARLAMENTAR";
         private const string ConfigurationDatabaseCollectionSauron = "SAURON_MONGO_DB_DATABASE_COLLECTION";
 
         private readonly IParseData<HtmlDocument, CamaraMunicipalCusteioParlamentar> _parseData;
