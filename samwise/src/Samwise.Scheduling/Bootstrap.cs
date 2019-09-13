@@ -1,21 +1,21 @@
-﻿using FluentScheduler;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Sauron.Scheduling.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentScheduler;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Samwise.Scheduling.Tasks;
 
-namespace Sauron.Scheduling
+namespace Samwise.Scheduling
 {
-    public static class Startup
+    public static class Bootstrap
     {
-        private static readonly IList<Type> Schedule = new List<Type>();
+        private static readonly IList<Type> _schedule = new List<Type>();
 
         public static IServiceCollection AddScheduledTask<TScheduledTask>(this IServiceCollection services) where TScheduledTask : ScheduledTask
         {
-            Schedule.Add(typeof(TScheduledTask));
+            _schedule.Add(typeof(TScheduledTask));
 
             services.TryAddScoped(typeof(TScheduledTask));
 
@@ -24,7 +24,7 @@ namespace Sauron.Scheduling
 
         public static IApplicationBuilder UseScheduledTask(this IApplicationBuilder app)
         {
-            var jobs = Schedule
+            var jobs = _schedule
                 .Select(type => (app.ApplicationServices.GetService(type) as ScheduledTask))
                 .ToArray();
 

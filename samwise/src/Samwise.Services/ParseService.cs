@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Configuration;
@@ -35,8 +36,7 @@ namespace Samwise.Services
 
         public async Task ExecuteParseAsync()
         {
-            var listRawData = await _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionNameSauron, lnq => lnq.Parsed == default);
-            foreach (var rawDataDetail in listRawData)
+            foreach (var rawDataDetail in await ListDetailsCusteiosParlamentares())
             {
                 var camaraMunicipalCusteioParlamentarResult = ExtractCamaraMunicipalCusteioParlamentar(rawDataDetail);
 
@@ -44,6 +44,9 @@ namespace Samwise.Services
                 await UpdateRawData(camaraMunicipalCusteioParlamentarResult, rawDataDetail);
             }
         }
+        
+        private Task<List<RawData>> ListDetailsCusteiosParlamentares() => 
+            _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionNameSauron, lnq => lnq.Parsed == default);
 
         private CamaraMunicipalCusteioParlamentar ExtractCamaraMunicipalCusteioParlamentar(RawData rawData)
         {
