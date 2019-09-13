@@ -26,13 +26,13 @@ namespace Samwise.Abstractions.Models.BeloHorizonte
             return this;
         }
 
-        public CamaraMunicipalCusteioParlamentar SetExtrationDateWithDateNow()
+        public CamaraMunicipalCusteioParlamentar SetDateExtractedWithDateNow()
         {
             ExtractionDate = DateTimeOffset.Now;
             return this;
         }
 
-        public CamaraMunicipalCusteioParlamentar SetIdParliamentary(string filterParliamentary)
+        public CamaraMunicipalCusteioParlamentar SetIdParliamentaryExtracted(string filterParliamentary)
         {
             IdParliamentary = Regex.Match(filterParliamentary, @"codVereador=(?<cdVereador>\d\w+)").Groups["cdVereador"].Value;
             return this;

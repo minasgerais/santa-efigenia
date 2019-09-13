@@ -51,8 +51,8 @@ namespace Samwise.Services
             htmlDocument.LoadHtml(rawData.RawContent);
             return _parseData.ParseData(htmlDocument)
                 .SetIdDocumentExtracted(rawData.Id)
-                .SetExtrationDateWithDateNow()
-                .SetIdParliamentary(rawData.Filter);
+                .SetDateExtractedWithDateNow()
+                .SetIdParliamentaryExtracted(rawData.Filter);
         }
 
         private Task SaveOrUpdateCamaraMunicipalCusteioParlamentar(CamaraMunicipalCusteioParlamentar camaraMunicipalCusteioParlamentar)
