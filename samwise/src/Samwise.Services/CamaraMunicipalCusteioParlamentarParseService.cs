@@ -45,7 +45,8 @@ namespace Samwise.Services
             }
         }
 
-        private Task<List<RawData>> ListDetailsCusteiosParlamentares() => _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionNameSauron);
+        private Task<List<RawData>> ListDetailsCusteiosParlamentares() => 
+            _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionNameSauron, lnq => lnq.Parsed == default);
 
         private CamaraMunicipalCusteioParlamentar ExtractCamaraMunicipalCusteioParlamentar(RawData rawData)
         {

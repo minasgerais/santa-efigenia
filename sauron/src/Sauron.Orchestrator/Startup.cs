@@ -22,9 +22,13 @@ namespace Sauron.Orchestrator
             (Globals.Configuration, Configuration, HostingEnvironment) = (configuration, configuration, hostingEnvironment);
         }
 
-        public virtual void ConfigureServices(IServiceCollection services) { }
+        public virtual void ConfigureServices(IServiceCollection services)
+        {
+        }
 
-        public virtual void Configure(IApplicationBuilder app) { }
+        public virtual void Configure(IApplicationBuilder app)
+        {
+        }
 
         IServiceProvider IStartup.ConfigureServices(IServiceCollection services)
         {
