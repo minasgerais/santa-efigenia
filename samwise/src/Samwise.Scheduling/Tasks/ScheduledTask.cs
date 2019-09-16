@@ -7,10 +7,10 @@ using Samwise.Abstractions.Extensions;
 
 namespace Samwise.Scheduling.Tasks
 {
-    public abstract class ScheduledTask: Registry
+    public abstract class ScheduledTask : Registry
     {
-        protected virtual string Name { get => nameof(ScheduledTask); }
-
+        protected abstract string Name { get; }
+        
         protected abstract string Scheduler { get; }
 
         protected int Interval { get; }

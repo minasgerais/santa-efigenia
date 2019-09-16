@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Samwise.Parsers;
 using Samwise.Repositories.MongoDB;
+using Samwise.Scheduling;
 using Samwise.Services;
 
 namespace Samwise.Orchestrator
@@ -32,6 +33,8 @@ namespace Samwise.Orchestrator
         void IStartup.Configure(IApplicationBuilder app)
         {
             Configure(app);
+            
+            app.UseScheduledTask();
         }
 
         public abstract void ConfigureServices(IServiceCollection services);

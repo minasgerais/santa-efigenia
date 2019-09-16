@@ -12,11 +12,11 @@ namespace Samwise.Scheduling
 {
     public static class Bootstrap
     {
-        private static readonly IList<Type> _schedule = new List<Type>();
+        private static readonly IList<Type> Schedule = new List<Type>();
 
         public static IServiceCollection AddScheduledTask<TScheduledTask>(this IServiceCollection services) where TScheduledTask : ScheduledTask
         {
-            _schedule.Add(typeof(TScheduledTask));
+            Schedule.Add(typeof(TScheduledTask));
 
             services.TryAddScoped(typeof(TScheduledTask));
 
@@ -25,7 +25,7 @@ namespace Samwise.Scheduling
 
         public static IApplicationBuilder UseScheduledTask(this IApplicationBuilder app)
         {
-            var jobs = _schedule
+            var jobs = Schedule
                 .Select(type => (app.ApplicationServices.GetService(type) as ScheduledTask))
                 .ToArray();
 

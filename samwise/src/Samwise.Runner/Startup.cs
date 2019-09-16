@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Samwise.Orchestrator;
+using Samwise.Runner.Tasks;
+using Samwise.Scheduling;
 
 namespace Samwise.Runner
 {
@@ -21,7 +23,7 @@ namespace Samwise.Runner
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddScheduledTask<CamaraMunicipalCusteioParlamentarTask>();
         }
 
         public override void Configure(IApplicationBuilder app)

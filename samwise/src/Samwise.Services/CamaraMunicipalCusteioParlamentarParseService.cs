@@ -12,7 +12,7 @@ using Samwise.Repositories.MongoDB;
 
 namespace Samwise.Services
 {
-    public class ParseService : IParseService<HtmlDocument, CamaraMunicipalCusteioParlamentar>
+    public class CamaraMunicipalCusteioParlamentarParseService : IParseService<HtmlDocument, CamaraMunicipalCusteioParlamentar>
     {
         private const string ConfigurationDatabaseCollectionSamwise = "SAMWISE_MONGO_DB_DATABASE_COLLECTION_CUSTEIO_PARLAMENTAR";
         private const string ConfigurationDatabaseCollectionSauron = "SAURON_MONGO_DB_DATABASE_COLLECTION";
@@ -23,7 +23,7 @@ namespace Samwise.Services
         private readonly string _databaseCollectionNameSamwise;
         private readonly string _databaseCollectionNameSauron;
 
-        public ParseService(IConfiguration configuration, IParseData<HtmlDocument, CamaraMunicipalCusteioParlamentar> parseData,
+        public CamaraMunicipalCusteioParlamentarParseService(IConfiguration configuration, IParseData<HtmlDocument, CamaraMunicipalCusteioParlamentar> parseData,
             IDataRepository<SamwiseDataRepository> samwiseDataRepository,
             IDataRepository<SauronDataRepository> sauronDataRepository)
         {
@@ -44,9 +44,8 @@ namespace Samwise.Services
                 await UpdateRawData(camaraMunicipalCusteioParlamentarResult, rawDataDetail);
             }
         }
-        
-        private Task<List<RawData>> ListDetailsCusteiosParlamentares() => 
-            _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionNameSauron, lnq => lnq.Parsed == default);
+
+        private Task<List<RawData>> ListDetailsCusteiosParlamentares() => _sauronDataRepository.GetAllAsync<RawData>(_databaseCollectionNameSauron);
 
         private CamaraMunicipalCusteioParlamentar ExtractCamaraMunicipalCusteioParlamentar(RawData rawData)
         {
